@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "c48958f5-e57b-4b31-8149-659ddd5b08af",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "PurpleMonster": {
+      "ver": "1.0.3",
+      "uuid": "c0dbe8bb-38b5-4ac3-8e8e-9909b6dea53a",
+      "rawTextureUuid": "c48958f5-e57b-4b31-8149-659ddd5b08af",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 78,
+      "height": 67,
+      "rawWidth": 78,
+      "rawHeight": 67,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
