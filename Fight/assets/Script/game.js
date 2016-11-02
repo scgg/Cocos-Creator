@@ -26,16 +26,45 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        progress: {
-            defaults: null,
-            type : cc.progressbar.Mode
+        T1PB: {
+            default: null,
+            type: cc.ProgressBar
+        },
+        adc1PB: {
+            default: null,
+            type: cc.ProgressBar
+        },
+        ap1PB: {
+            default: null,
+            type: cc.ProgressBar
+        },
+        T2PB: {
+            default: null,
+            type: cc.ProgressBar
+        },
+        adc2PB: {
+            default: null,
+            type: cc.ProgressBar
+        },
+        ap2PB: {
+            default: null,
+            type: cc.ProgressBar
+        },
+        winner:
+        {
+            default: null,
+            type: cc.Label
         },
         
         // defaults, set visually when attaching this script to the Canvas
         MaxMoveSpeed: 1,
-        TLife: 1000,
-        adcLife: 500,
-        apLife: 500,
+        T1Life: 1000,
+        T2Life: 1000,
+        adc1Life: 500,
+        adc2Life: 500,
+        ap1Life: 500,
+        ap2Life: 500,
+        Faction: 1,
         
         
     },
@@ -55,14 +84,13 @@ cc.Class({
         return array;
     },
     
-    //两个Sprite之间x的距离
+    //两个Sprite之间的距离
     range: function(role1,role2)
     {
         var arr1 = this.getInfo(role1);
         var arr2 = this.getInfo(role2);
-        if(arr1[0] < arr2[0])
+        if(this.Faction == 2)
         {
-            this.Faction = 1;
             var oneToTwoX = arr2[0] - arr1[0] - arr2[2]/2 - arr1[2]/2;
             var oneToTwoY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
             var array = new Array(oneToTwoX,oneToTwoY);
@@ -70,9 +98,8 @@ cc.Class({
         }
         else
         {
-            this.Faction = 2;
             var twoToOneX = arr2[0] - arr1[0] + arr2[2]/2 + arr1[2]/2;
-            var twoToOneY = arr2[1] - arr1[1] + arr2[3]/2 - arr1[3]/2;
+            var twoToOneY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
             var array1 = new Array(twoToOneX,twoToOneY);
             return array1;
         }
@@ -83,7 +110,11 @@ cc.Class({
         var array = this.range(role1,role2);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
         var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
-        return cc.sequence(moveT,moveBac);
+        var callBack = cc.callFunc(function(){
+            // this.Animation();
+            this.kLife();
+            },this);
+        return cc.sequence(moveT,callBack,moveBac);
     },
     
     AToB: function(A,B)
@@ -91,16 +122,23 @@ cc.Class({
         var tototo = this.move(A,B);
         A.runAction(tototo);
     },
-    
+    Animation: function()
+    {
+        var animCtrl = this.isWrecker().getComponent(cc.Animation);
+        animCtrl.play();
+          
+    },
     //战斗
     fight: function()
     {
-        if(this.FactionArrayOne[0] <= 0 && this.FactionArrayOne[1] <= 0 && this.FactionArrayOne[2] <= 0)
+        if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0)
         {
+            this.winner.string = "Two Win!!";
             this.unschedule(this.fight);
         }
-        else if(this.FactionArrayTwo[0] <= 0 && this.FactionArrayTwo[1] <= 0 && this.FactionArrayTwo[2] <= 0)
+        else if(this.FactionArrayTwo[0].currlife <= 0 && this.FactionArrayTwo[1].currlife <= 0 && this.FactionArrayTwo[2].currlife <= 0)
         {
+            this.winner.string = "One Win!!";
             this.unschedule(this.fight);
         }
         else
@@ -114,81 +152,70 @@ cc.Class({
     //扣血
     kLife: function()
     {
-        if(this.FactionArrayOne[0] <= 0 && this.FactionArrayOne[1] <= 0 && this.FactionArrayOne[2] <= 0)
+        if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0)
         {
             this.unschedule(this.kLife);
         }
-        else if(this.FactionArrayTwo[0] <= 0 && this.FactionArrayTwo[1] <= 0 && this.FactionArrayTwo[2] <= 0)
+        else if(this.FactionArrayTwo[0].currlife <= 0 && this.FactionArrayTwo[1].currlife <= 0 && this.FactionArrayTwo[2].currlife <= 0)
         {
             this.unschedule(this.kLife);
         }
         else
         {
-            this.isSufferer()
-            // if(this.index == 1)
+            this.GetRandomNum(100, 300);
+            var sufferer = this.isSufferer();
+            sufferer.currlife -= this.Kblood;
+            sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
+            // if(sufferer.currlife <= 0 )
             // {
-            //     //扣血
-            //     this.twolife = this.twolife - this.Kblood;
-            //     //更新血量
-            //     this.monster2Life.string = this.twolife;
-            //     this.index = 2;
-            // }
-            // else
-            // {
-            //     //扣血        
-            //     this.onelife = this.onelife - this.Kblood;
-            //     //更新血量
-            //     this.monster1Life.string = this.onelife;
-            //     this.index = 1;
+            //     var animation = sufferer.getComponent(cc.Animation);
+            //     this.scheduleOnce(function()
+            //     {
+            //         animation.play();
+            //     }, 0.5);
             // }
         }
-        
     },
     //肇事者
     isWrecker: function()
     {
         if(this.Faction == 1)
         {
-            while(this.FactionArrayTwo[this.Bwrecker].life <= 0)
+            while(this.FactionArrayOne[this.Awrecker].currlife <= 0)
             {
-                this.Bwrecker ++;
-                if(this.Bwrecker > 2)
+                this.Awrecker ++;
+                if(this.Awrecker > 2)
                 {
-                    this.Bwrecker = 0;
+                    this.Awrecker = 0;
                 }
             }
-            while(this.FactionArrayTwo[this.Bwrecker].life > 0)
+            var xx = this.FactionArrayOne[this.Awrecker]
+            this.Awrecker ++;
+            if(this.Awrecker > 2)
             {
-                var ss = this.FactionArrayTwo[this.Bwrecker];
-                this.Bwrecker ++;
-                if(this.Bwrecker > 2)
-                {
-                    this.Bwrecker = 0;
-                }
-                return ss;
+                this.Awrecker = 0;
             }
+            this.Faction = 2;
+            return xx;
         }
         else
         {
-            
-            while(this.FactionArrayOne[this.Awrecker].life <= 0)
+            while(this.FactionArrayTwo[this.Bwrecker].currlife <= 0)
             {
-                this.Awrecker ++;
-                if(this.Awrecker > 2)
+                this.Bwrecker ++;
+                if(this.Bwrecker > 2)
                 {
-                    this.Awrecker = 0;
+                    this.Bwrecker = 0;
                 }
             }
-            while(this.FactionArrayOne[this.Awrecker].life > 0)
+            var ss = this.FactionArrayTwo[this.Bwrecker];
+            this.Bwrecker ++;
+            if(this.Bwrecker > 2)
             {
-                var xx = this.FactionArrayOne[this.Awrecker]
-                this.Awrecker ++;
-                if(this.Awrecker > 2)
-                {
-                    this.Awrecker = 0;
-                }
-                return xx;
+                this.Bwrecker = 0;
             }
+            this.Faction = 1;
+            return ss;
         }
     },
     
@@ -197,11 +224,11 @@ cc.Class({
     {
         if(this.Faction == 1)
         {
-            if(this.FactionArrayOne[0].life > 0){
+            if(this.FactionArrayOne[0].currlife > 0){
                 return this.FactionArrayOne[0];
-            }else if(this.FactionArrayOne[1],life > 0){
+            }else if(this.FactionArrayOne[1].currlife > 0){
                 return this.FactionArrayOne[1];
-            }else if (this.FactionArrayOne[2].life > 0){
+            }else if (this.FactionArrayOne[2].currlife > 0){
                 return this.FactionArrayOne[2];
             }else{
                 
@@ -209,11 +236,11 @@ cc.Class({
         }
         else
         {
-            if(this.FactionArrayTwo[0].life > 0){
+            if(this.FactionArrayTwo[0].currlife > 0){
                 return this.FactionArrayTwo[0];
-            }else if(this.FactionArrayTwo[1],life > 0){
+            }else if(this.FactionArrayTwo[1].currlife > 0){
                 return this.FactionArrayTwo[1];
-            }else if (this.FactionArrayTwo[2].life > 0){
+            }else if (this.FactionArrayTwo[2].currlife > 0){
                 return this.FactionArrayTwo[2];
             }else{
                 
@@ -221,37 +248,63 @@ cc.Class({
             
         }
     },
-    
-    // use this for initialization
-    onLoad: function () 
+    //随机数，扣血量
+    GetRandomNum: function(Min,Max)
+    {   
+        var Range = Max - Min;   
+        var Rand = Math.random();   
+        this.Kblood = (Min + Math.round(Rand * Range));   
+    },
+    init: function()
     {
         //初始化血量
-        this.T1.life = this.TLife;
-        this.T2.life = this.TLife;
-        this.adc1.life = this.adcLife;
-        this.adc2.life = this.adcLife;
-        this.ap1.life = this.apLife;
-        this.ap2.life = this.apLife;
-        this.Faction = 0;//阵营
+        this.T1.life = this.T1Life;
+        this.T2.life = this.T2Life;
+        this.adc1.life = this.adc1Life;
+        this.adc2.life = this.adc2Life;
+        this.ap1.life = this.ap1Life;
+        this.ap2.life = this.ap2Life;
+        
+        //当前血量
+        this.T1.currlife = this.T1Life;
+        this.T2.currlife = this.T2Life;
+        this.adc1.currlife = this.adc1Life;
+        this.adc2.currlife = this.adc2Life;
+        this.ap1.currlife = this.ap1Life;
+        this.ap2.currlife = this.ap2Life;
+        
+        
+        // this.Faction = 0;//阵营
         
         //肇事者
         this.Awrecker = 0;
         this.Bwrecker = 0;
         //受害人
-        // this.Asufferer = 0;
-        // this.Bsufferer = 0;
+        this.Asufferer = 0;
+        this.Bsufferer = 0;
         
+        this.T1.ProgressBar = this.T1PB;
+        this.T2.ProgressBar = this.T2PB;
+        this.adc1.ProgressBar = this.adc1PB;
+        this.adc2.ProgressBar = this.adc2PB;
+        this.ap1.ProgressBar = this.ap1PB;
+        this.ap2.ProgressBar = this.ap2PB;
+    },
+    
+    // use this for initialization
+    onLoad: function () 
+    {
         
+        this.init();
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
-        // this.isWrecker.runAction(this.move(this.isWrecker, this.isSufferer));
-        // this.AToB(this.FactionArrayTwo[1],this.FactionArrayOne[2]);
         this.schedule(this.fight,2,cc.REPEAT_FOREVER,0.5);  
-        // this.schedule(this.kLife,2,cc.REPEAT_FOREVER,1.5);
+        
+        
+        // animCtrl.playAdditive("linear_2");
+        
     },
-
-    // called every frame
     // update: function (dt) {
-
+        
     // },
 });

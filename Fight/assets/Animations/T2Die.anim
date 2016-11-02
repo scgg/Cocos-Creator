@@ -1,0 +1,61 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "T2Die",
+  "_objFlags": 0,
+  "_rawFiles": null,
+  "_duration": 0.11666666666666667,
+  "sample": 60,
+  "speed": 0.3,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "c5a8ea71-4224-4bb8-a54b-d252ab748279"
+            }
+          },
+          {
+            "frame": 0.016666666666666666,
+            "value": {
+              "__uuid__": "c5a8ea71-4224-4bb8-a54b-d252ab748279"
+            }
+          },
+          {
+            "frame": 0.03333333333333333,
+            "value": {
+              "__uuid__": "3847722b-a316-444f-9cd2-1adcc6832a06"
+            }
+          },
+          {
+            "frame": 0.05,
+            "value": {
+              "__uuid__": "3847722b-a316-444f-9cd2-1adcc6832a06"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "651da546-bd64-4c6f-a206-179a2d5b3a89"
+            }
+          },
+          {
+            "frame": 0.08333333333333333,
+            "value": {
+              "__uuid__": "651da546-bd64-4c6f-a206-179a2d5b3a89"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "a5ac09b4-598a-40a3-b848-7c8b1009d07e"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
