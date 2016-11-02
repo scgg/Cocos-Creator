@@ -114,22 +114,15 @@ cc.Class({
         return array;
     },
     
-    //两个Sprite之间x的距离
-    rangeX: function(monster1,monster2)
+    //两个Sprite之间的距离
+    range: function(monster1,monster2)
     {
         var arr1 = this.getInfo(monster1);
         var arr2 = this.getInfo(monster2);
         var oneToTwoX = arr2[0] - arr1[0] - arr2[2]/2 - arr1[2]/2;
-        
-        return oneToTwoX;
-    },
-    //两个Sprite之间y的距离
-    rangeY: function(monster1,monster2)
-    {
-        var arr1 = this.getInfo(monster1);
-        var arr2 = this.getInfo(monster2);
         var oneToTwoY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
-        return oneToTwoY;
+        var array = new Array(oneToTwoX,oneToTwoY);
+        return array;
     },
     //随机数，扣血量
     GetRandomNum: function(Min,Max)
@@ -142,8 +135,9 @@ cc.Class({
     // use this for initialization
     onLoad: function () 
     {
-        this.moveX = this.rangeX(this.monster1, this.monster2);
-        this.moveY = this.rangeY(this.monster1, this.monster2);
+        var array = this.range(this.monster1, this.monster2);
+        this.moveX = array[0];
+        this.moveY = array[1];
         this.monster1Life.string = this.onelife;
         this.monster2Life.string = this.twolife;
         this.schedule(this.fight,2,cc.REPEAT_FOREVER,0.5);  
