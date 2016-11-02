@@ -26,6 +26,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        progress: {
+            defaults: null,
+            type : cc.progressbar.Mode
+        },
         
         // defaults, set visually when attaching this script to the Canvas
         MaxMoveSpeed: 1,
@@ -107,34 +111,39 @@ cc.Class({
         }
     },
     
-    // //扣血
-    // kLife: function()
-    // {
-    //     if(this.onelife <= 0 || this.twolife <= 0)
-    //     {
-    //         this.unschedule(this.kLife);
-    //     }
-    //     else
-    //     {
-    //         if(this.index == 1)
-    //         {
-    //             //扣血
-    //             this.twolife = this.twolife - this.Kblood;
-    //             //更新血量
-    //             this.monster2Life.string = this.twolife;
-    //             this.index = 2;
-    //         }
-    //         else
-    //         {
-    //             //扣血        
-    //             this.onelife = this.onelife - this.Kblood;
-    //             //更新血量
-    //             this.monster1Life.string = this.onelife;
-    //             this.index = 1;
-    //         }
-    //     }
+    //扣血
+    kLife: function()
+    {
+        if(this.FactionArrayOne[0] <= 0 && this.FactionArrayOne[1] <= 0 && this.FactionArrayOne[2] <= 0)
+        {
+            this.unschedule(this.kLife);
+        }
+        else if(this.FactionArrayTwo[0] <= 0 && this.FactionArrayTwo[1] <= 0 && this.FactionArrayTwo[2] <= 0)
+        {
+            this.unschedule(this.kLife);
+        }
+        else
+        {
+            this.isSufferer()
+            // if(this.index == 1)
+            // {
+            //     //扣血
+            //     this.twolife = this.twolife - this.Kblood;
+            //     //更新血量
+            //     this.monster2Life.string = this.twolife;
+            //     this.index = 2;
+            // }
+            // else
+            // {
+            //     //扣血        
+            //     this.onelife = this.onelife - this.Kblood;
+            //     //更新血量
+            //     this.monster1Life.string = this.onelife;
+            //     this.index = 1;
+            // }
+        }
         
-    // },
+    },
     //肇事者
     isWrecker: function()
     {
