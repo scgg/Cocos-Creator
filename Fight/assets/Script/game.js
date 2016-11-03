@@ -65,8 +65,6 @@ cc.Class({
         ap1Life: 500,
         ap2Life: 500,
         Faction: 1,
-        
-        
     },
     
     //得到Sprite的X,Y,Width,Height
@@ -109,24 +107,25 @@ cc.Class({
     {   
         var array = this.range(role1,role2);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
+        var stop = cc.moveBy(0.5, cc.p(0,0));
         var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
         var callBack = cc.callFunc(function(){
-            // this.Animation();
+            this.animCtrl.playAdditive();
             this.kLife();
             },this);
-        return cc.sequence(moveT,callBack,moveBac);
+        var action = cc.sequence(moveT,callBack,stop,moveBac);
+        return action;
     },
     
     AToB: function(A,B)
     {
         var tototo = this.move(A,B);
         A.runAction(tototo);
-    },
-    Animation: function()
-    {
-        var animCtrl = this.isWrecker().getComponent(cc.Animation);
-        animCtrl.play();
-          
+        setTimeout(function() {
+        }, 700);
+        // setTimeout(function() {
+        //     A.resume(A);
+        // }, 1500);
     },
     //战斗
     fight: function()
@@ -145,6 +144,7 @@ cc.Class({
         {
             var wrecker = this.isWrecker();
             var sufferer = this.isSufferer();
+            this.animCtrl = wrecker.getComponent(cc.Animation);
             this.AToB(wrecker, sufferer);
         }
     },
@@ -162,18 +162,16 @@ cc.Class({
         }
         else
         {
+            //随机数
             this.GetRandomNum(100, 300);
             var sufferer = this.isSufferer();
             sufferer.currlife -= this.Kblood;
             sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
-            // if(sufferer.currlife <= 0 )
-            // {
-            //     var animation = sufferer.getComponent(cc.Animation);
-            //     this.scheduleOnce(function()
-            //     {
-            //         animation.play();
-            //     }, 0.5);
-            // }
+            if(sufferer.currlife <= 0 && sufferer == this.T2)
+            {
+                var ani = sufferer.getComponent(cc.Animation);
+                ani.play("T2Die");
+            }
         }
     },
     //肇事者
@@ -184,14 +182,14 @@ cc.Class({
             while(this.FactionArrayOne[this.Awrecker].currlife <= 0)
             {
                 this.Awrecker ++;
-                if(this.Awrecker > 2)
+                if(this.Awrecker > this.FactionArrayOne.length - 1)
                 {
                     this.Awrecker = 0;
                 }
             }
             var xx = this.FactionArrayOne[this.Awrecker]
             this.Awrecker ++;
-            if(this.Awrecker > 2)
+            if(this.Awrecker > this.FactionArrayOne.length - 1)
             {
                 this.Awrecker = 0;
             }
@@ -231,7 +229,6 @@ cc.Class({
             }else if (this.FactionArrayOne[2].currlife > 0){
                 return this.FactionArrayOne[2];
             }else{
-                
             }
         }
         else
@@ -243,9 +240,7 @@ cc.Class({
             }else if (this.FactionArrayTwo[2].currlife > 0){
                 return this.FactionArrayTwo[2];
             }else{
-                
             }
-            
         }
     },
     //随机数，扣血量
@@ -273,9 +268,6 @@ cc.Class({
         this.ap1.currlife = this.ap1Life;
         this.ap2.currlife = this.ap2Life;
         
-        
-        // this.Faction = 0;//阵营
-        
         //肇事者
         this.Awrecker = 0;
         this.Bwrecker = 0;
@@ -290,21 +282,16 @@ cc.Class({
         this.ap1.ProgressBar = this.ap1PB;
         this.ap2.ProgressBar = this.ap2PB;
     },
-    
     // use this for initialization
     onLoad: function () 
     {
-        
         this.init();
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
-        this.schedule(this.fight,2,cc.REPEAT_FOREVER,0.5);  
-        
-        
-        // animCtrl.playAdditive("linear_2");
-        
+        var anim = this.ap2.getComponent(cc.Animation);
+        anim.playAdditive("ap2Animation");
+        this.schedule(this.fight,2.7,cc.REPEAT_FOREVER,0.5); 
     },
     // update: function (dt) {
-        
     // },
 });

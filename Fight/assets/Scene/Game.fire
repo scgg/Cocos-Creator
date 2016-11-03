@@ -51,10 +51,10 @@
         "__id__": 39
       },
       {
-        "__id__": 46
+        "__id__": 47
       },
       {
-        "__id__": 55
+        "__id__": 56
       }
     ],
     "_localZOrder": 0,
@@ -241,7 +241,7 @@
       "__id__": 39
     },
     "ap2": {
-      "__id__": 46
+      "__id__": 47
     },
     "T1PB": {
       "__id__": 12
@@ -259,10 +259,10 @@
       "__id__": 44
     },
     "ap2PB": {
-      "__id__": 51
+      "__id__": 52
     },
     "winner": {
-      "__id__": 54
+      "__id__": 55
     },
     "MaxMoveSpeed": 1,
     "T1Life": 1000,
@@ -1455,6 +1455,9 @@
     "_components": [
       {
         "__id__": 45
+      },
+      {
+        "__id__": 46
       }
     ],
     "_prefab": null,
@@ -1666,6 +1669,24 @@
     "_atlas": null
   },
   {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 39
+    },
+    "_enabled": true,
+    "_defaultClip": {
+      "__uuid__": "99e5dac9-30dd-4429-860b-6711107b4b74"
+    },
+    "_clips": [
+      {
+        "__uuid__": "99e5dac9-30dd-4429-860b-6711107b4b74"
+      }
+    ],
+    "playOnLoad": false
+  },
+  {
     "__type__": "cc.Node",
     "_name": "ap2",
     "_objFlags": 0,
@@ -1689,11 +1710,11 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 99,
-      "height": 114
+      "height": 116
     },
     "_children": [
       {
-        "__id__": 47
+        "__id__": 48
       }
     ],
     "_rotationX": 0,
@@ -1715,10 +1736,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 52
+        "__id__": 53
       },
       {
-        "__id__": 53
+        "__id__": 54
       }
     ],
     "_prefab": null,
@@ -1738,7 +1759,7 @@
     },
     "_cascadeOpacityEnabled": true,
     "_parent": {
-      "__id__": 46
+      "__id__": 47
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1752,7 +1773,7 @@
     },
     "_children": [
       {
-        "__id__": 48
+        "__id__": 49
       }
     ],
     "_rotationX": 0,
@@ -1774,10 +1795,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 50
+        "__id__": 51
       },
       {
-        "__id__": 51
+        "__id__": 52
       }
     ],
     "_prefab": null,
@@ -1797,7 +1818,7 @@
     },
     "_cascadeOpacityEnabled": true,
     "_parent": {
-      "__id__": 47
+      "__id__": 48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1829,7 +1850,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 49
+        "__id__": 50
       }
     ],
     "_prefab": null,
@@ -1840,7 +1861,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 48
+      "__id__": 49
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -1866,7 +1887,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 47
+      "__id__": 48
     },
     "_enabled": true,
     "_spriteFrame": {
@@ -1892,11 +1913,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 47
+      "__id__": 48
     },
     "_enabled": true,
     "_N$barSprite": {
-      "__id__": 49
+      "__id__": 50
     },
     "_N$mode": 0,
     "_N$totalLength": 80,
@@ -1908,11 +1929,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 46
+      "__id__": 47
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__uuid__": "af7f7d22-1f76-4502-9644-d45ffdc83c45"
+      "__uuid__": "54b1b9bf-c454-4233-ac81-f4aa95a57f87"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -1934,11 +1955,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 46
+      "__id__": 47
     },
     "_enabled": true,
     "_defaultClip": {
-      "__uuid__": "ceb43ed1-a2e3-4b3b-8c9b-6a7d74c8c540"
+      "__uuid__": "c9710d9f-7380-4c7b-9e53-0585d5f6bdde"
     },
     "_clips": [
       {
@@ -1948,14 +1969,14 @@
         "__uuid__": "c9710d9f-7380-4c7b-9e53-0585d5f6bdde"
       }
     ],
-    "playOnLoad": true
+    "playOnLoad": false
   },
   {
     "__type__": "cc.Label",
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 55
+      "__id__": 56
     },
     "_enabled": true,
     "_useOriginalSize": false,
@@ -2016,7 +2037,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 54
+        "__id__": 55
       }
     ],
     "_prefab": null,
