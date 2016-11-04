@@ -58,9 +58,17 @@ cc.Class({
             default: null,
             type: cc.Node
         },
+        speed: {
+            default: null,
+            type: cc.Button
+        },
+        btLabel: {
+          default: null,
+          type: cc.Label
+        },
         
         // defaults, set visually when attaching this script to the Canvas
-        MaxMoveSpeed: 1,
+        MaxMoveSpeed: 0,
         T1Life: 1000,
         T2Life: 1000,
         adc1Life: 500,
@@ -68,7 +76,8 @@ cc.Class({
         ap1Life: 500,
         ap2Life: 500,
         Faction: 1,
-        fightAnimTime: 0.6,
+        fightAnimTime: 0,
+        timer: 0,
     },
     
     //得到Sprite的X,Y,Width,Height
@@ -118,7 +127,15 @@ cc.Class({
             this.kLife();
             },this);
         var action = cc.sequence(moveT,callBack,delay,moveBac);
-        return action;
+        if(this.fightSpeed == 1)
+        {
+             var ac = cc.speed(action, 1);
+        }else
+        {
+             var ac = cc.speed(action, 2);
+            //  this.animCtrl.speed = 0.1;
+        }
+        return ac;
     },
     fireTo: function(role){
         var array = this.range(this.missile, role);
@@ -131,7 +148,14 @@ cc.Class({
             // this.missile.destroy();
             },this);
         var action = cc.sequence(moveT,callBack,delay,moveBac);
-        return action;
+        if(this.fightSpeed == 1)
+        {
+             var ac = cc.speed(action, 1);
+        }else
+        {
+             var ac = cc.speed(action, 2);
+        }
+        return ac;
     },
     
     AToB: function(A,B)
@@ -163,7 +187,7 @@ cc.Class({
                 this.animCtrl.playAdditive();
                 this.missile.opacity = 255;
                 var missileAnim = this.missile.getComponent(cc.Animation);
-                missileAnim.play();
+                missileAnim.playAdditive();
                 this.missile.runAction(this.fireTo(sufferer));
                 
             }else
@@ -306,12 +330,37 @@ cc.Class({
         
         this.ap1.scaleX = -1;
         this.missile.opacity = 0;
+        this.fightSpeed = 1;
         
+    },
+    button: function()
+    {
+        var self = this;
+        self.speed.node.on(cc.Node.EventType.TOUCH_END,function(event)
+        {
+            if(self.fightSpeed == 1)
+            {
+                self.btLabel.string = "X 2";
+                self.timer = 1.7 ;
+                self.fightAnimTime = 0.6;
+                self.fightSpeed = 2;
+                
+            }else
+            {
+                self.btLabel.string = "X 1";
+                self.timer = 2.7;
+                self.fightAnimTime = 0.6;
+                self.fightSpeed = 1;
+            }
+        });  
     },
     // use this for initialization
     onLoad: function () 
     {
         this.init();
+        this.btLabel.string = "X 1";
+        this.button();
+        
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
         
@@ -319,8 +368,7 @@ cc.Class({
         anim.playAdditive("ap2Animation");
         var ap1Anim = this.ap1.getComponent(cc.Animation);
         ap1Anim.playAdditive("ap1");
-        
-        this.schedule(this.fight,2.7,cc.REPEAT_FOREVER,0.5); 
+        this.schedule(this.fight,this.timer,cc.REPEAT_FOREVER,0.5); 
     },
     
     // update: function (dt) {

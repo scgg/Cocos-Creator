@@ -352,6 +352,10 @@
     "_clips": [
       {
         "__uuid__": "729df6ab-85d9-4330-8838-cb787fbe752d"
+      },
+      null,
+      {
+        "__uuid__": "a325aa26-e5a7-4712-b57d-a511bd2104b8"
       }
     ],
     "playOnLoad": true
@@ -396,6 +400,9 @@
     "_clips": [
       {
         "__uuid__": "ff0afce1-3dcf-4b58-bbb8-f10e49bd1148"
+      },
+      {
+        "__uuid__": "5a162797-2924-47cd-a794-e1b5ad4ab4ff"
       }
     ],
     "playOnLoad": false
@@ -410,6 +417,9 @@
     "_enabled": true,
     "shengzi": {
       "__id__": 7
+    },
+    "img": {
+      "__uuid__": "3bd1bb8d-0d05-4bf2-a4ae-251dc703ecd9"
     },
     "maxMoveSpeed": 200,
     "accel": 150

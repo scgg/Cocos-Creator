@@ -6,6 +6,10 @@ cc.Class({
             default: null,
             type: cc.Node,
         },
+        img: {
+            default: null,
+            type: cc.SpriteFrame,
+        },
         // 最大移动速度
         maxMoveSpeed: 200,
         // 加速度
@@ -43,6 +47,12 @@ cc.Class({
                             self.accLeft = false;
                             self.accRight = true;
                             break;
+                        case cc.KEY.w:
+                            var com = this.Sprite.getComponent(cc.Sprite);
+                            com.SpriteFrame = this.img;
+                            this.node.enabled=false;
+                            this.node.enabled=true;
+                            break;
                     }
                 },
                 onKeyReleased:function(keyCode,event){
@@ -53,6 +63,9 @@ cc.Class({
                             break;
                         case cc.KEY.d:
                             self.accRight = false;
+                            
+                            break;
+                        case cc.KEY.w:
                             
                             break;
                     }
