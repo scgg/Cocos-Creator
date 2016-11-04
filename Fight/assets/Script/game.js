@@ -50,10 +50,13 @@ cc.Class({
             default: null,
             type: cc.ProgressBar
         },
-        winner:
-        {
+        winner: {
             default: null,
             type: cc.Label
+        },
+        missile: {
+            default: null,
+            type: cc.Node
         },
         
         // defaults, set visually when attaching this script to the Canvas
@@ -65,6 +68,7 @@ cc.Class({
         ap1Life: 500,
         ap2Life: 500,
         Faction: 1,
+        fightAnimTime: 0.6,
     },
     
     //得到Sprite的X,Y,Width,Height
@@ -107,13 +111,26 @@ cc.Class({
     {   
         var array = this.range(role1,role2);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
-        var stop = cc.moveBy(0.5, cc.p(0,0));
+        var delay = cc.delayTime(this.fightAnimTime)
         var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
         var callBack = cc.callFunc(function(){
             this.animCtrl.playAdditive();
             this.kLife();
             },this);
-        var action = cc.sequence(moveT,callBack,stop,moveBac);
+        var action = cc.sequence(moveT,callBack,delay,moveBac);
+        return action;
+    },
+    fireTo: function(role){
+        var array = this.range(this.missile, role);
+        var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
+        var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
+        var delay = cc.delayTime(this.fightAnimTime)
+        var callBack = cc.callFunc(function(){
+            this.kLife();
+            this.missile.opacity = 0;
+            // this.missile.destroy();
+            },this);
+        var action = cc.sequence(moveT,callBack,delay,moveBac);
         return action;
     },
     
@@ -121,11 +138,6 @@ cc.Class({
     {
         var tototo = this.move(A,B);
         A.runAction(tototo);
-        setTimeout(function() {
-        }, 700);
-        // setTimeout(function() {
-        //     A.resume(A);
-        // }, 1500);
     },
     //战斗
     fight: function()
@@ -145,7 +157,19 @@ cc.Class({
             var wrecker = this.isWrecker();
             var sufferer = this.isSufferer();
             this.animCtrl = wrecker.getComponent(cc.Animation);
-            this.AToB(wrecker, sufferer);
+            if(wrecker == this.ap1)
+            {
+                //导弹
+                this.animCtrl.playAdditive();
+                this.missile.opacity = 255;
+                var missileAnim = this.missile.getComponent(cc.Animation);
+                missileAnim.play();
+                this.missile.runAction(this.fireTo(sufferer));
+                
+            }else
+            {
+                this.AToB(wrecker, sufferer);
+            }
         }
     },
     
@@ -228,7 +252,6 @@ cc.Class({
                 return this.FactionArrayOne[1];
             }else if (this.FactionArrayOne[2].currlife > 0){
                 return this.FactionArrayOne[2];
-            }else{
             }
         }
         else
@@ -239,7 +262,6 @@ cc.Class({
                 return this.FactionArrayTwo[1];
             }else if (this.FactionArrayTwo[2].currlife > 0){
                 return this.FactionArrayTwo[2];
-            }else{
             }
         }
     },
@@ -281,6 +303,10 @@ cc.Class({
         this.adc2.ProgressBar = this.adc2PB;
         this.ap1.ProgressBar = this.ap1PB;
         this.ap2.ProgressBar = this.ap2PB;
+        
+        this.ap1.scaleX = -1;
+        this.missile.opacity = 0;
+        
     },
     // use this for initialization
     onLoad: function () 
@@ -288,10 +314,16 @@ cc.Class({
         this.init();
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
+        
         var anim = this.ap2.getComponent(cc.Animation);
         anim.playAdditive("ap2Animation");
+        var ap1Anim = this.ap1.getComponent(cc.Animation);
+        ap1Anim.playAdditive("ap1");
+        
         this.schedule(this.fight,2.7,cc.REPEAT_FOREVER,0.5); 
     },
+    
     // update: function (dt) {
     // },
+    
 });
