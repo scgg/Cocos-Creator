@@ -120,32 +120,43 @@ cc.Class({
     {   
         var array = this.range(role1,role2);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
-        var delay = cc.delayTime(this.fightAnimTime)
+        var delay = cc.delayTime(this.fightAnimTime);
         var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
-        var callBack = cc.callFunc(function(){
-            this.animCtrl.playAdditive();
+        var callBack = cc.callFunc(function()
+        {
+            var animState = this.animCtrl.playAdditive();
+            if(this.fightSpeed == 1)
+            {
+                animState.speed = 0.3;
+            }
+            else
+            {
+                animState.speed = 0.6;
+            }
             this.kLife();
-            },this);
-        var action = cc.sequence(moveT,callBack,delay,moveBac);
+        },this);
+        var spawn = cc.spawn(callBack,delay);
+        var action = cc.sequence(moveT,spawn,moveBac);
         if(this.fightSpeed == 1)
         {
-             var ac = cc.speed(action, 1);
-        }else
+            var ac = cc.speed(action, 1);
+        }
+        else
         {
-             var ac = cc.speed(action, 2);
-            //  this.animCtrl.speed = 0.1;
+            var ac = cc.speed(action, 2);
         }
         return ac;
     },
-    fireTo: function(role){
+    
+    fireTo: function(role)
+    {
         var array = this.range(this.missile, role);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
-        var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
-        var delay = cc.delayTime(this.fightAnimTime)
+        var moveBac = cc.moveBy(0, cc.p(-array[0],-array[1]));
+        var delay = cc.delayTime(this.fightAnimTime);
         var callBack = cc.callFunc(function(){
             this.kLife();
             this.missile.opacity = 0;
-            // this.missile.destroy();
             },this);
         var action = cc.sequence(moveT,callBack,delay,moveBac);
         if(this.fightSpeed == 1)
@@ -184,13 +195,22 @@ cc.Class({
             if(wrecker == this.ap1)
             {
                 //导弹
-                this.animCtrl.playAdditive();
                 this.missile.opacity = 255;
+                var misState = this.animCtrl.playAdditive();
+                if(this.fightSpeed == 1)
+                {
+                    misState.speed = 0.3;
+                }
+                else
+                {
+                    misState.speed = 0.6;
+                }
                 var missileAnim = this.missile.getComponent(cc.Animation);
                 missileAnim.playAdditive();
                 this.missile.runAction(this.fireTo(sufferer));
                 
-            }else
+            }
+            else
             {
                 this.AToB(wrecker, sufferer);
             }
@@ -341,14 +361,14 @@ cc.Class({
             if(self.fightSpeed == 1)
             {
                 self.btLabel.string = "X 2";
-                self.timer = 1.7 ;
-                self.fightAnimTime = 0.6;
+                self.timer = 1.3;
+                self.fightAnimTime = 0.3;
                 self.fightSpeed = 2;
-                
-            }else
+            }
+            else
             {
                 self.btLabel.string = "X 1";
-                self.timer = 2.7;
+                self.timer = 2.6;
                 self.fightAnimTime = 0.6;
                 self.fightSpeed = 1;
             }
