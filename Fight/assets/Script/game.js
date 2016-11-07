@@ -2,27 +2,27 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        T1:{
+        T1: {
             default: null,
             type: cc.Node,
         },
-        adc1:{
+        adc1: {
             default: null,
             type: cc.Node
         },
-        ap1:{
+        ap1: {
             default: null,
             type: cc.Node
         },
-        T2:{
+        T2: {
             default: null,
             type: cc.Node
         },
-        adc2:{
+        adc2: {
             default: null,
             type: cc.Node
         },
-        ap2:{
+        ap2: {
             default: null,
             type: cc.Node
         },
@@ -79,10 +79,8 @@ cc.Class({
         fightAnimTime: 0,
         timer: 0,
     },
-    
     //得到Sprite的X,Y,Width,Height
-    getInfo: function(role)
-    {
+    getInfo: function(role) {
         var X = role.x;
         var Y = role.y;
         var Width = role.width;
@@ -94,10 +92,8 @@ cc.Class({
         var array = new Array(X,Y,Width,Height);
         return array;
     },
-    
     //两个Sprite之间的距离
-    range: function(role1,role2)
-    {
+    range: function(role1,role2) {
         var arr1 = this.getInfo(role1);
         var arr2 = this.getInfo(role2);
         if(this.Faction == 2)
@@ -115,9 +111,7 @@ cc.Class({
             return array1;
         }
     },
-    
-    move: function(role1,role2)
-    {   
+    move: function(role1,role2) {   
         var array = this.range(role1,role2);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
         var delay = cc.delayTime(this.fightAnimTime);
@@ -137,19 +131,9 @@ cc.Class({
         },this);
         var spawn = cc.spawn(callBack,delay);
         var action = cc.sequence(moveT,spawn,moveBac);
-        if(this.fightSpeed == 1)
-        {
-            var ac = cc.speed(action, 1);
-        }
-        else
-        {
-            var ac = cc.speed(action, 2);
-        }
-        return ac;
+        return action;
     },
-    
-    fireTo: function(role)
-    {
+    fireTo: function(role) {
         var array = this.range(this.missile, role);
         var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
         var moveBac = cc.moveBy(0, cc.p(-array[0],-array[1]));
@@ -161,22 +145,26 @@ cc.Class({
         var action = cc.sequence(moveT,callBack,delay,moveBac);
         if(this.fightSpeed == 1)
         {
-             var ac = cc.speed(action, 1);
-        }else
+            var ac = cc.speed(action, 1);
+        }
+        else
         {
-             var ac = cc.speed(action, 2);
+            var ac = cc.speed(action, 2);
         }
         return ac;
     },
-    
-    AToB: function(A,B)
-    {
-        var tototo = this.move(A,B);
-        A.runAction(tototo);
+    AToB: function(A,B) {
+        if(this.fightSpeed == 1)
+        {
+             var ac = cc.speed(this.move(A,B), 1);
+        }else
+        {
+             var ac = cc.speed(this.move(A,B), 2);
+        }
+        A.runAction(ac);
     },
     //战斗
-    fight: function()
-    {
+    fight: function() {
         if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0)
         {
             this.winner.string = "Two Win!!";
@@ -196,7 +184,8 @@ cc.Class({
             {
                 //导弹
                 this.missile.opacity = 255;
-                var misState = this.animCtrl.playAdditive();
+                var missileAnim = this.missile.getComponent(cc.Animation);
+                var misState = missileAnim.playAdditive();
                 if(this.fightSpeed == 1)
                 {
                     misState.speed = 0.3;
@@ -205,10 +194,7 @@ cc.Class({
                 {
                     misState.speed = 0.6;
                 }
-                var missileAnim = this.missile.getComponent(cc.Animation);
-                missileAnim.playAdditive();
                 this.missile.runAction(this.fireTo(sufferer));
-                
             }
             else
             {
@@ -216,20 +202,8 @@ cc.Class({
             }
         }
     },
-    
     //扣血
-    kLife: function()
-    {
-        if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0)
-        {
-            this.unschedule(this.kLife);
-        }
-        else if(this.FactionArrayTwo[0].currlife <= 0 && this.FactionArrayTwo[1].currlife <= 0 && this.FactionArrayTwo[2].currlife <= 0)
-        {
-            this.unschedule(this.kLife);
-        }
-        else
-        {
+    kLife: function() {
             //随机数
             this.GetRandomNum(100, 300);
             var sufferer = this.isSufferer();
@@ -240,11 +214,9 @@ cc.Class({
                 var ani = sufferer.getComponent(cc.Animation);
                 ani.play("T2Die");
             }
-        }
     },
     //肇事者
-    isWrecker: function()
-    {
+    isWrecker: function() {
         if(this.Faction == 1)
         {
             while(this.FactionArrayOne[this.Awrecker].currlife <= 0)
@@ -284,10 +256,8 @@ cc.Class({
             return ss;
         }
     },
-    
     //受害人
-    isSufferer: function()
-    {
+    isSufferer: function() {
         if(this.Faction == 1)
         {
             if(this.FactionArrayOne[0].currlife > 0){
@@ -310,14 +280,12 @@ cc.Class({
         }
     },
     //随机数，扣血量
-    GetRandomNum: function(Min,Max)
-    {   
+    GetRandomNum: function(Min,Max) {   
         var Range = Max - Min;   
         var Rand = Math.random();   
         this.Kblood = (Min + Math.round(Rand * Range));   
     },
-    init: function()
-    {
+    init: function() {
         //初始化血量
         this.T1.life = this.T1Life;
         this.T2.life = this.T2Life;
@@ -353,30 +321,33 @@ cc.Class({
         this.fightSpeed = 1;
         
     },
-    button: function()
-    {
+    button: function() {
         var self = this;
         self.speed.node.on(cc.Node.EventType.TOUCH_END,function(event)
         {
             if(self.fightSpeed == 1)
             {
+                self.unschedule(self.fight);
                 self.btLabel.string = "X 2";
                 self.timer = 1.3;
                 self.fightAnimTime = 0.3;
                 self.fightSpeed = 2;
+                self.schedule(self.fight,self.timer,cc.REPEAT_FOREVER,1);
             }
             else
             {
+                self.unschedule(self.fight);
+                
                 self.btLabel.string = "X 1";
                 self.timer = 2.6;
                 self.fightAnimTime = 0.6;
                 self.fightSpeed = 1;
+                self.schedule(self.fight,self.timer,cc.REPEAT_FOREVER,1);
             }
         });  
     },
     // use this for initialization
-    onLoad: function () 
-    {
+    onLoad: function () {
         this.init();
         this.btLabel.string = "X 1";
         this.button();

@@ -107,9 +107,7 @@ cc.Class({
             //      this.xSpeed -= this.accel * dt * 2;
             // }
             this.xSpeed = 0;
-                this.walkDown.stop("walkDown");
-                // this.node.image = "/主角/身子/手枪/Image 523 at frame 10.png";
-                // this.node.setTexture(cc.url.raw('/主角/身子/手枪/Image 523 at frame 10.png'));
+            this.walkDown.stop("walkDown");
             
         }
         // 限制主角的速度不能超过最大值
