@@ -76,8 +76,8 @@ cc.Class({
         ap1Life: 500,
         ap2Life: 500,
         Faction: 1,
-        fightAnimTime: 0,
         timer: 0,
+        
     },
     //得到Sprite的X,Y,Width,Height
     getInfo: function(role) {
@@ -123,14 +123,31 @@ cc.Class({
             {
                 animState.speed = 0.3;
             }
-            else
+            else if(this.fightSpeed == 2)
             {
                 animState.speed = 0.6;
             }
+            else{
+                animState.speed = 0.9;
+            }
             this.kLife();
         },this);
+        var mBCallBack = cc.callFunc(function(){
+            if(this.fightSpeed == 1)
+            {
+                this.timer = 2.6;
+            }
+            else if(this.fightSpeed == 2)
+            {
+                this.timer = 1.3;
+            }
+            else
+            {
+                this.timer = 0.9;
+            }
+        },this);
         var spawn = cc.spawn(callBack,delay);
-        var action = cc.sequence(moveT,spawn,moveBac);
+        var action = cc.sequence(moveT,spawn,moveBac,mBCallBack);
         return action;
     },
     fireTo: function(role) {
@@ -143,23 +160,17 @@ cc.Class({
             this.missile.opacity = 0;
             },this);
         var action = cc.sequence(moveT,callBack,delay,moveBac);
-        if(this.fightSpeed == 1)
+        if(this.fightSpeed)
         {
-            var ac = cc.speed(action, 1);
-        }
-        else
-        {
-            var ac = cc.speed(action, 2);
+            var ac = cc.speed(action,this.fightSpeed);
         }
         return ac;
     },
+    
     AToB: function(A,B) {
-        if(this.fightSpeed == 1)
+        if(this.fightSpeed)
         {
-             var ac = cc.speed(this.move(A,B), 1);
-        }else
-        {
-             var ac = cc.speed(this.move(A,B), 2);
+            var ac = cc.speed(this.move(A,B), this.fightSpeed);
         }
         A.runAction(ac);
     },
@@ -168,12 +179,12 @@ cc.Class({
         if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0)
         {
             this.winner.string = "Two Win!!";
-            this.unschedule(this.fight);
+            this.noStop = 0;
         }
         else if(this.FactionArrayTwo[0].currlife <= 0 && this.FactionArrayTwo[1].currlife <= 0 && this.FactionArrayTwo[2].currlife <= 0)
         {
             this.winner.string = "One Win!!";
-            this.unschedule(this.fight);
+            this.noStop = 0;
         }
         else
         {
@@ -190,9 +201,13 @@ cc.Class({
                 {
                     misState.speed = 0.3;
                 }
-                else
+                else if (this.fightSpeed == 2)
                 {
                     misState.speed = 0.6;
+                }
+                else
+                {
+                    misState.speed = 0.9
                 }
                 this.missile.runAction(this.fireTo(sufferer));
             }
@@ -204,16 +219,16 @@ cc.Class({
     },
     //扣血
     kLife: function() {
-            //随机数
-            this.GetRandomNum(100, 300);
-            var sufferer = this.isSufferer();
-            sufferer.currlife -= this.Kblood;
-            sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
-            if(sufferer.currlife <= 0 && sufferer == this.T2)
-            {
-                var ani = sufferer.getComponent(cc.Animation);
-                ani.play("T2Die");
-            }
+        //随机数
+        this.GetRandomNum(100, 300);
+        var sufferer = this.isSufferer();
+        sufferer.currlife -= this.Kblood;
+        sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
+        if(sufferer.currlife <= 0 && sufferer == this.T2)
+        {
+            var ani = sufferer.getComponent(cc.Animation);
+            ani.play("T2Die");
+        }
     },
     //肇事者
     isWrecker: function() {
@@ -285,6 +300,28 @@ cc.Class({
         var Rand = Math.random();   
         this.Kblood = (Min + Math.round(Rand * Range));   
     },
+    button: function() {
+        var self = this;
+        self.speed.node.on(cc.Node.EventType.TOUCH_END,function(event)
+        {
+            if(self.fightSpeed == 1)
+            {
+                self.btLabel.string = "X 2";
+                self.fightSpeed = 2;
+                
+            }
+            else if (self.fightSpeed == 2)
+            {
+                self.btLabel.string = "X 3";
+                self.fightSpeed = 3;
+            }
+            else
+            {
+                self.btLabel.string = "X 1";
+                self.fightSpeed = 1;
+            }
+        });  
+    },
     init: function() {
         //初始化血量
         this.T1.life = this.T1Life;
@@ -293,7 +330,6 @@ cc.Class({
         this.adc2.life = this.adc2Life;
         this.ap1.life = this.ap1Life;
         this.ap2.life = this.ap2Life;
-        
         //当前血量
         this.T1.currlife = this.T1Life;
         this.T2.currlife = this.T2Life;
@@ -301,50 +337,27 @@ cc.Class({
         this.adc2.currlife = this.adc2Life;
         this.ap1.currlife = this.ap1Life;
         this.ap2.currlife = this.ap2Life;
-        
         //肇事者
         this.Awrecker = 0;
         this.Bwrecker = 0;
         //受害人
         this.Asufferer = 0;
         this.Bsufferer = 0;
-        
+        //血条
         this.T1.ProgressBar = this.T1PB;
         this.T2.ProgressBar = this.T2PB;
         this.adc1.ProgressBar = this.adc1PB;
         this.adc2.ProgressBar = this.adc2PB;
         this.ap1.ProgressBar = this.ap1PB;
         this.ap2.ProgressBar = this.ap2PB;
-        
+        //其他参数
         this.ap1.scaleX = -1;
         this.missile.opacity = 0;
         this.fightSpeed = 1;
+        this.fightAnimTime = 0.6;
+        this.time = 0
+        this.noStop = 1;
         
-    },
-    button: function() {
-        var self = this;
-        self.speed.node.on(cc.Node.EventType.TOUCH_END,function(event)
-        {
-            if(self.fightSpeed == 1)
-            {
-                self.unschedule(self.fight);
-                self.btLabel.string = "X 2";
-                self.timer = 1.3;
-                self.fightAnimTime = 0.3;
-                self.fightSpeed = 2;
-                self.schedule(self.fight,self.timer,cc.REPEAT_FOREVER,1);
-            }
-            else
-            {
-                self.unschedule(self.fight);
-                
-                self.btLabel.string = "X 1";
-                self.timer = 2.6;
-                self.fightAnimTime = 0.6;
-                self.fightSpeed = 1;
-                self.schedule(self.fight,self.timer,cc.REPEAT_FOREVER,1);
-            }
-        });  
     },
     // use this for initialization
     onLoad: function () {
@@ -355,14 +368,22 @@ cc.Class({
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
         
-        var anim = this.ap2.getComponent(cc.Animation);
-        anim.playAdditive("ap2Animation");
+        var ap2Anim = this.ap2.getComponent(cc.Animation);
+        ap2Anim.playAdditive("ap2Animation");
         var ap1Anim = this.ap1.getComponent(cc.Animation);
         ap1Anim.playAdditive("ap1");
-        this.schedule(this.fight,this.timer,cc.REPEAT_FOREVER,0.5); 
+        this.fight();
     },
     
-    // update: function (dt) {
-    // },
+    update: function (dt) {
+        this.time += dt;
+        if(this.noStop == 1)
+        {
+            if(this.time >= this.timer) {
+                this.fight();
+                this.time = 0;
+            }
+        }
+    },
     
 });
