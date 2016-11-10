@@ -3540,7 +3540,7 @@
     "adc2Life": 1000,
     "ap1Life": 1000,
     "ap2Life": 1000,
-    "Faction": 1,
+    "isFighter": 1,
     "timer": 2.6
   }
 ]
