@@ -1,5 +1,12 @@
 {
-  "excludeScenes": [],
+  "excludeScenes": [
+    "a19d6744-6956-49d5-a47f-7b4cc4de8f67",
+    "8be43c18-572c-4e61-a6ed-8e19f785afd1"
+  ],
+  "includeAnySDK": false,
+  "includeSdk": [
+    "anysdk"
+  ],
   "orientation": {
     "landscapeLeft": true,
     "landscapeRight": true,
@@ -8,6 +15,6 @@
   },
   "packageName": "org.cocos2d.helloworld",
   "startScene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
-  "title": "hello_world",
+  "title": "HHFight",
   "webOrientation": "auto"
 }

@@ -101,6 +101,7 @@ cc.Class({
         ap1Life: 500,
         ap2Life: 500,
         isFighter: 1,
+        display: cc.Label,
     },
     //得到Sprite的X,Y,Width,Height
     getInfo: function(role) {
@@ -119,69 +120,62 @@ cc.Class({
     range: function(role1,role2) {
         var arr1 = this.getInfo(role1);
         var arr2 = this.getInfo(role2);
-        if(arr1[0] < arr2[0]){
+        if(arr1[0] < arr2[0]) {
             var oneToTwoX = arr2[0] - arr1[0] - arr2[2]/2 - arr1[2]/2;
             var oneToTwoY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
             var array = new Array(oneToTwoX,oneToTwoY);
             return array;
-        }else{
+        } else {
             var twoToOneX = arr2[0] - arr1[0] + arr2[2]/2 + arr1[2]/2;
             var twoToOneY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
             var array1 = new Array(twoToOneX,twoToOneY);
             return array1;
         }
     },
-        //肇事者
+    //肇事者
     isWrecker: function() {
-        if(this.isFighter == 1){
-            while(this.FactionArrayOne[this.Awrecker].currlife <= 0)
-            {
+        if(this.isFighter == 1) {
+            while(this.FactionArrayOne[this.Awrecker].currlife <= 0) {
                 this.Awrecker ++;
-                if(this.Awrecker > this.FactionArrayOne.length - 1){
+                if(this.Awrecker > this.FactionArrayOne.length - 1) {
                     this.Awrecker = 0;
                 }
             }
             var xx = this.FactionArrayOne[this.Awrecker]
             this.Awrecker ++;
-            if(this.Awrecker > this.FactionArrayOne.length - 1){
+            if(this.Awrecker > this.FactionArrayOne.length - 1) {
                 this.Awrecker = 0;
             }
             this.isFighter = 2;
             return xx;
         }else{
-            while(this.FactionArrayTwo[this.Bwrecker].currlife <= 0)
-            {
+            while(this.FactionArrayTwo[this.Bwrecker].currlife <= 0) {
                 this.Bwrecker ++;
-                if(this.Bwrecker > 2)
-                {
-                    this.Bwrecker = 0;
-                }
+                if(this.Bwrecker > 2) {this.Bwrecker = 0;}
             }
             var ss = this.FactionArrayTwo[this.Bwrecker];
             this.Bwrecker ++;
-            if(this.Bwrecker > 2){
-                this.Bwrecker = 0;   
-            }
+            if(this.Bwrecker > 2) {this.Bwrecker = 0;}
             this.isFighter = 1;
             return ss;
         }
     },
     //受害人
     isSufferer: function() {
-        if(this.isFighter == 1){
-            if(this.FactionArrayOne[0].currlife > 0){
+        if(this.isFighter == 1) {
+            if(this.FactionArrayOne[0].currlife > 0) {
                 return this.FactionArrayOne[0];
-            }else if(this.FactionArrayOne[1].currlife > 0){
+            }else if(this.FactionArrayOne[1].currlife > 0) {
                 return this.FactionArrayOne[1];
-            }else if (this.FactionArrayOne[2].currlife > 0){
+            }else if (this.FactionArrayOne[2].currlife > 0) {
                 return this.FactionArrayOne[2];
             }
         }else{
-            if(this.FactionArrayTwo[0].currlife > 0){
+            if(this.FactionArrayTwo[0].currlife > 0) {
                 return this.FactionArrayTwo[0];
-            }else if(this.FactionArrayTwo[1].currlife > 0){
+            }else if(this.FactionArrayTwo[1].currlife > 0) {
                 return this.FactionArrayTwo[1];
-            }else if (this.FactionArrayTwo[2].currlife > 0){
+            }else if (this.FactionArrayTwo[2].currlife > 0) {
                 return this.FactionArrayTwo[2];
             }
         }
@@ -203,42 +197,47 @@ cc.Class({
             this.kLife();
             //每次攻击加0.2能量
             for (var i = 0; i < this.FactionArrayOne.length; i++) {
-                if(role1 == this.FactionArrayOne[i])
-                {
+                if(role1 == this.FactionArrayOne[i]) {
                     role1.NL.progress += 0.3;
-                    if(role1.NL.progress > 1)
-                    {
-                        role1.NL.progress = 1;
-                    }
-                }else if(role2 == this.FactionArrayOne[i])
-                {
+                    if(role1.NL.progress > 1) {role1.NL.progress = 1;}
+                }else if(role2 == this.FactionArrayOne[i]) {
                     role2.NL.progress += 0.2;
-                    if(role2.NL.progress > 1)
-                    {
-                        role2.NL.progress = 1;
-                    }
+                    if(role2.NL.progress > 1) {role2.NL.progress = 1;}
                 }
             }
         },this);
-        var mBCallBack = cc.callFunc(function(){
-            log(this.isT1FDZ);
-            if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0)
+        var mBCallBack = cc.callFunc(function() {
+            if(this.isAuto == 0)
             {
+                if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0) {
                 this.fight();
-            }else{
-                if(this.isT1FDZ == 1)
-                {
-                    this.HSG(this.T1);
-                    this.isT1FDZ = 0;
-                }else if(this.isAdc1FDZ == 1)
-                {
-                    this.HSG(this.adc1);
-                    this.isAdc1FDZ = 0;
                 }else{
+                    if(this.isT1FDZ == 1) {
+                        this.HSG(this.T1);
+                        this.isT1FDZ = 0;
+                    }else if(this.isAdc1FDZ == 1) {
+                        this.HSG(this.adc1);
+                        this.isAdc1FDZ = 0;
+                    }else {
+                        this.HSG(this.ap1);
+                        this.isAp1FDZ = 0;
+                    }
+                }
+            }else{
+                if(this.T1.NL.progress == 1) {
+                    this.HSG(this.T1);
+                    this.T1.NL.progress = 0;
+                }else if(this.adc1.NL.progress == 1) {
+                    this.HSG(this.adc1);
+                    this.adc1.NL.progress = 0;
+                }else if(this.ap1.NL.progress == 1) {
                     this.HSG(this.ap1);
-                    this.isAp1FDZ = 0;
+                    this.ap1.NL.progress = 0;
+                }else{
+                    this.fight();
                 }
             }
+            
         },this);
         var spawn = cc.spawn(callBack,delay);
         var action = cc.sequence(moveT,spawn,moveBac,mBCallBack);
@@ -251,31 +250,26 @@ cc.Class({
         var callBack = cc.callFunc(function(){
             this.kLife();
             this.ap1.NL.progress += 0.3
-            if(this.ap1.NL.progress > 1)
-            {
+            if(this.ap1.NL.progress > 1) {
                 this.ap1.NL.progress = 1;
             }
             this.missile.opacity = 0;
             },this);
-            var mbCallback = cc.callFunc(function()
-            {
-                if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0)
-            {
-                this.fight();
-            }else{
-                if(this.isT1FDZ == 1)
-                {
-                    this.HSG(this.T1);
-                    this.isT1FDZ = 0;
-                }else if(this.isAdc1FDZ == 1)
-                {
-                    this.HSG(this.adc1);
-                    this.isAdc1FDZ = 0;
+            var mbCallback = cc.callFunc(function() {
+                if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0) {
+                    this.fight();
                 }else{
-                    this.HSG(this.ap1);
-                    this.isAp1FDZ = 0;
+                    if(this.isT1FDZ == 1) {
+                        this.HSG(this.T1);
+                        this.isT1FDZ = 0;
+                    }else if(this.isAdc1FDZ == 1) {
+                        this.HSG(this.adc1);
+                        this.isAdc1FDZ = 0;
+                    }else {
+                        this.HSG(this.ap1);
+                        this.isAp1FDZ = 0;
+                    }
                 }
-            }
             },this)
         var action = cc.sequence(moveT,callBack,moveBac,mbCallback);
         if(this.fightSpeed) {
@@ -347,23 +341,19 @@ cc.Class({
         });  
     },
     wind : function(releaser) {
-        var windNum = 1;
         var wind =  new cc.Node();
-        var sprite = wind.addComponent(cc.Sprite);
         wind.parent = this.T1.parent;
-        
+        var sprite = wind.addComponent(cc.Sprite);
         var array1 = this.getInfo(releaser);
         wind.x = array1[0] + 80;
         wind.y = array1[1];
-        
+        var windNum = 1;//wind第一张图
+        //起风吧
         this.schedule(function(){
             var photo = cc.js.formatStr('resources/wind/winds%d.png',windNum);
             sprite.spriteFrame = new cc.SpriteFrame(cc.url.raw(photo));
             windNum ++;
-            if(windNum > 6)
-            {
-                windNum = 1;
-            }
+            if(windNum > 7) { windNum = 1;}
         },0.1,cc.REPEAT_FOREVER);
         return wind;
     },
@@ -391,7 +381,6 @@ cc.Class({
             }
             this.fight();
         }, this);
-        
         var delay = cc.delayTime(0.5);
         var callBac = cc.callFunc(function(){
             var anima = releaser.getComponent(cc.Animation);
@@ -401,40 +390,39 @@ cc.Class({
     },
     dazhao: function() {
         var self = this;
-        self.T1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event)
-        {
-            if(self.T1.currlife > 0)
-            {
-                if(self.T1.NL.progress == 1)
-                {
+        self.T1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event) {
+            if(self.T1.currlife > 0) {
+                if(self.T1.NL.progress == 1) {
                     self.isT1FDZ = 1;
                     self.T1.NL.progress = 0;
                 }
             }
-            
         });
-        self.adc1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event)
-        {   
-            if(self.adc1.currlife > 0)
-            {
-                if(self.adc1.NL.progress == 1)
-                {
+        self.adc1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event) {   
+            if(self.adc1.currlife > 0) {
+                if(self.adc1.NL.progress == 1) {
                     self.isAdc1FDZ = 1;
                     self.adc1.NL.progress = 0;
                 }
             }
         });
-        self.ap1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event)
-        {
-            if(self.ap1.currlife > 0)
-            {
-                if(self.ap1.NL.progress == 1)
-                {
+        self.ap1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event) {
+            if(self.ap1.currlife > 0) {
+                if(self.ap1.NL.progress == 1) {
                     self.isAp1FDZ = 1;
                     self.ap1.NL.progress = 0;
                 }
             }
         });
+    },
+    autoButton: function() {
+        if(this.isAuto == 0){
+            this.isAuto = 1;
+            this.display.string = "自动";
+        }else{
+            this.isAuto = 0;
+            this.display.string = "手动";
+        }
     },
     init: function() {
         //初始化血量
@@ -478,6 +466,7 @@ cc.Class({
         this.isT1FDZ = 0;
         this.isAdc1FDZ = 0;
         this.isAp1FDZ = 0;
+        this.isAuto = 0;
     },
     onLoad: function () {
         this.init();
@@ -485,8 +474,7 @@ cc.Class({
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
     },
-    start: function()
-    {
+    start: function() {
         var ap2Anim = this.ap2.getComponent(cc.Animation);
         ap2Anim.playAdditive("ap2Animation");
         var ap1Anim = this.ap1.getComponent(cc.Animation);
