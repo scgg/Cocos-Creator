@@ -1,10 +1,9 @@
 cc.Class({
     extends: cc.Component,
-
     properties: {
         T1: {
             default: null,
-            type: cc.Node,
+            type: cc.Node
         },
         adc1: {
             default: null,
@@ -94,7 +93,6 @@ cc.Class({
             default: null,
             type: cc.ProgressBar
         },
-        
         MaxMoveSpeed: 0,
         T1Life: 1000,
         T2Life: 1000,
@@ -103,7 +101,6 @@ cc.Class({
         ap1Life: 500,
         ap2Life: 500,
         isFighter: 1,
-        
     },
     //得到Sprite的X,Y,Width,Height
     getInfo: function(role) {
@@ -122,7 +119,7 @@ cc.Class({
     range: function(role1,role2) {
         var arr1 = this.getInfo(role1);
         var arr2 = this.getInfo(role2);
-        if(this.isFighter == 2){
+        if(arr1[0] < arr2[0]){
             var oneToTwoX = arr2[0] - arr1[0] - arr2[2]/2 - arr1[2]/2;
             var oneToTwoY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
             var array = new Array(oneToTwoX,oneToTwoY);
@@ -150,7 +147,6 @@ cc.Class({
                 this.Awrecker = 0;
             }
             this.isFighter = 2;
-
             return xx;
         }else{
             while(this.FactionArrayTwo[this.Bwrecker].currlife <= 0)
@@ -167,7 +163,6 @@ cc.Class({
                 this.Bwrecker = 0;   
             }
             this.isFighter = 1;
-
             return ss;
         }
     },
@@ -227,10 +222,22 @@ cc.Class({
         },this);
         var mBCallBack = cc.callFunc(function(){
             log(this.isT1FDZ);
-            if(this.isT1FDZ == 1)
+            if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0)
             {
                 this.fight();
             }else{
+                if(this.isT1FDZ == 1)
+                {
+                    this.HSG(this.T1);
+                    this.isT1FDZ = 0;
+                }else if(this.isAdc1FDZ == 1)
+                {
+                    this.HSG(this.adc1);
+                    this.isAdc1FDZ = 0;
+                }else{
+                    this.HSG(this.ap1);
+                    this.isAp1FDZ = 0;
+                }
             }
         },this);
         var spawn = cc.spawn(callBack,delay);
@@ -252,12 +259,23 @@ cc.Class({
             },this);
             var mbCallback = cc.callFunc(function()
             {
-                if(this.isT1FDZ == true)
+                if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0)
+            {
+                this.fight();
+            }else{
+                if(this.isT1FDZ == 1)
                 {
-                    this.fight();
+                    this.HSG(this.T1);
+                    this.isT1FDZ = 0;
+                }else if(this.isAdc1FDZ == 1)
+                {
+                    this.HSG(this.adc1);
+                    this.isAdc1FDZ = 0;
                 }else{
-                    
+                    this.HSG(this.ap1);
+                    this.isAp1FDZ = 0;
                 }
+            }
             },this)
         var action = cc.sequence(moveT,callBack,moveBac,mbCallback);
         if(this.fightSpeed) {
@@ -328,11 +346,16 @@ cc.Class({
                 } 
         });  
     },
-    wind : function() {
+    wind : function(releaser) {
         var windNum = 1;
         var wind =  new cc.Node();
         var sprite = wind.addComponent(cc.Sprite);
         wind.parent = this.T1.parent;
+        
+        var array1 = this.getInfo(releaser);
+        wind.x = array1[0] + 80;
+        wind.y = array1[1];
+        
         this.schedule(function(){
             var photo = cc.js.formatStr('resources/wind/winds%d.png',windNum);
             sprite.spriteFrame = new cc.SpriteFrame(cc.url.raw(photo));
@@ -344,43 +367,74 @@ cc.Class({
         },0.1,cc.REPEAT_FOREVER);
         return wind;
     },
+    //技能：哈塞给
+    HSG : function(releaser) {
+        var sufferer;
+        if(this.FactionArrayTwo[0].currlife > 0){
+                sufferer = this.FactionArrayTwo[0];
+            }else if(this.FactionArrayTwo[1].currlife > 0){
+                sufferer = this.FactionArrayTwo[1];
+            }else if (this.FactionArrayTwo[2].currlife > 0){
+                sufferer = this.FactionArrayTwo[2];
+            } 
+        var wind = this.wind(releaser);
+        var moveX = sufferer.x - wind.x - sufferer.width/2 - wind.width/2;
+        var moveY = sufferer.y - wind.y;
+        var moveto = cc.moveBy(1, cc.p(moveX,moveY));
+        var callBack = cc.callFunc(function(){
+            wind.destroy();
+            sufferer.currlife -= this.Kblood;
+            sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
+            if(sufferer.currlife <= 0 && sufferer == this.T2){
+                var ani = sufferer.getComponent(cc.Animation);
+                ani.play("T2Die");
+            }
+            this.fight();
+        }, this);
+        
+        var delay = cc.delayTime(0.5);
+        var callBac = cc.callFunc(function(){
+            var anima = releaser.getComponent(cc.Animation);
+            anima.playAdditive();
+        },this);
+        wind.runAction(cc.sequence(callBac,delay,moveto,callBack));
+    },
     dazhao: function() {
         var self = this;
         self.T1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event)
         {
-            if(self.T1.NL.progress == 1)
+            if(self.T1.currlife > 0)
             {
-                self.isT1FDZ = 0;
-                var array = self.getInfo(self.T1);
-                var wind = self.wind();
-                wind.x = array[0] + 80;
-                wind.y = array[1];
-                self.T1.NL.progress = 0;
+                if(self.T1.NL.progress == 1)
+                {
+                    self.isT1FDZ = 1;
+                    self.T1.NL.progress = 0;
+                }
             }
+            
         });
         self.adc1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event)
-        {
-            if(self.adc1.NL.progress == 1)
+        {   
+            if(self.adc1.currlife > 0)
             {
-                var array = self.getInfo(self.T1);
-                var wind = self.wind();
-                wind.x = array[0] + 80;
-                wind.y = array[1];
-                self.adc1.NL.progress = 0;
+                if(self.adc1.NL.progress == 1)
+                {
+                    self.isAdc1FDZ = 1;
+                    self.adc1.NL.progress = 0;
+                }
             }
         });
         self.ap1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event)
         {
-            if(self.ap1.NL.progress == 1)
+            if(self.ap1.currlife > 0)
             {
-                var array = self.getInfo(self.T1);
-                var wind = self.wind();
-                wind.x = array[0] + 80;
-                wind.y = array[1];
-                self.ap1.NL.progress = 0;
+                if(self.ap1.NL.progress == 1)
+                {
+                    self.isAp1FDZ = 1;
+                    self.ap1.NL.progress = 0;
+                }
             }
         });
-        
     },
     init: function() {
         //初始化血量
@@ -421,7 +475,9 @@ cc.Class({
         this.fightAnimTime = 0.6;
         this.animSpeed = 0.3
         this.btLabel.string = "X 1";
-        this.isT1FDZ = 1;
+        this.isT1FDZ = 0;
+        this.isAdc1FDZ = 0;
+        this.isAp1FDZ = 0;
     },
     onLoad: function () {
         this.init();
