@@ -9,12 +9,43 @@ cc.Class({
         bT: cc.Node,
         bP: cc.Node,
         bD: cc.Node,
-        winner: cc.Label,
         
+        aTHP: cc.ProgressBar,
+        aPHP: cc.ProgressBar,
+        aDHP: cc.ProgressBar,
+        bTHP: cc.ProgressBar,
+        bPHP: cc.ProgressBar,
+        bDHP: cc.ProgressBar,
+        
+        winner: cc.Label,
+        speedUp: cc.Button,
+        speedLabel: cc.Label,
+        speed: 1,
         TLife: 1000,
         otherLife: 700,
     },
+    
+    speedUP: function(){
+        var self = this;
+        self.speedUp.node.on(cc.Node.EventType.TOUCH_END,function(event){
+            if(self.speed == 1)
+            {
+                self.speedLabel.string = "X 2";
+                self.speed = 2;
+            }else if(self.speed == 2)
+            {
+                self.speed = 3;
+                self.speedLabel.string = "X 3";
+            }else
+            {
+                self.speed = 1;
+                self.speedLabel.string = "X 1";
+            }
+        });
+        
+    },
     init: function() {
+        //总生命值和当前生命值
         this.aT.life = this.TLife;
         this.aT.currlife = this.TLife;
         this.aP.life = this.otherLife;
@@ -28,7 +59,14 @@ cc.Class({
         this.bP.currlife = this.otherLife;
         this.bD.life = this.otherLife;
         this.bD.currlife = this.otherLife;
-        
+        //血条
+        this.aT.HP = this.aTHP;
+        this.aP.HP = this.aPHP;
+        this.aD.HP = this.aDHP;
+        this.bT.HP = this.bTHP;
+        this.bP.HP = this.bPHP;
+        this.bD.HP = this.bDHP;
+        //other
         this.Asufferer = 0;
         this.Bsufferer = 0;
         this.Awrecker = 0;
@@ -142,7 +180,7 @@ cc.Class({
             //     }
             // }
         },self);
-        let delay = cc.delayTime(0.5);
+        let delay = cc.delayTime(0.4);
         let klife = cc.callFunc(function(){
             self.kLife();
         },self);
@@ -162,7 +200,10 @@ cc.Class({
         let spawn = cc.spawn(callBack,delay);
         let spawn2 = cc.spawn(klife,delay2);
         let action = cc.sequence(moveT,spawn,spawn2,ending,moveBac,mBCallBack);
-        return action;
+        if(self.speed){
+            var ac = cc.speed(action, self.speed);
+            return ac;
+        }
     },
     
     //战斗
@@ -180,7 +221,7 @@ cc.Class({
         let sufferer = this.isSufferer();
         animation.hitDown(sufferer);
         sufferer.currlife -= this.Kblood;
-        // sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
+        sufferer.HP.progress = sufferer.currlife/sufferer.life;
         if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0){
             this.winner.string = "Two Win!!";
             this.gameOver = 1;
@@ -198,6 +239,7 @@ cc.Class({
         this.fight();
     },
     start: function() {
+        this.speedUP();
     },
     // called every frame, uncomment this function to activate update callback
     // update: function (dt) {
