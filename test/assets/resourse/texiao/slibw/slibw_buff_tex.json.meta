@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "1e2ee031-ed0c-49fc-b44f-978bacbbb944",
+  "atlasJson": "{\"SubTexture\":[{\"y\":175,\"frameX\":0,\"height\":51,\"frameHeight\":52,\"frameY\":-1,\"width\":182,\"name\":\"sddw09\",\"frameWidth\":182,\"x\":1},{\"x\":1,\"y\":331,\"width\":150,\"name\":\"sddw10\",\"height\":41},{\"x\":1,\"y\":1,\"width\":182,\"name\":\"sddw07\",\"height\":56},{\"y\":59,\"frameX\":0,\"height\":56,\"frameHeight\":57,\"frameY\":-1,\"width\":182,\"name\":\"sddw08\",\"frameWidth\":182,\"x\":1},{\"x\":1,\"y\":374,\"width\":132,\"name\":\"sddw01\",\"height\":31},{\"x\":1,\"y\":117,\"width\":182,\"name\":\"sddw06\",\"height\":56},{\"y\":228,\"frameX\":-1,\"height\":50,\"frameHeight\":50,\"frameY\":0,\"width\":182,\"name\":\"sddw05\",\"frameWidth\":183,\"x\":1},{\"y\":280,\"frameX\":-1,\"height\":49,\"frameHeight\":49,\"frameY\":0,\"width\":166,\"name\":\"sddw04\",\"frameWidth\":167,\"x\":1}],\"imagePath\":\"slibw_buff_tex.png\",\"name\":\"slbw_buff\"}",
+  "texture": "eb8ecf8e-19fa-4d07-9d6e-135fa176bfa9",
+  "subMetas": {}
+}

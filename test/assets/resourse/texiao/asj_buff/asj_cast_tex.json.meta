@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "e1d75779-8301-47fe-b014-7d513c6046a5",
+  "atlasJson": "{\"imagePath\":\"asj_cast_tex.png\",\"SubTexture\":[{\"frameY\":-149,\"y\":421,\"frameWidth\":140,\"frameX\":-25,\"frameHeight\":240,\"height\":76,\"width\":85,\"name\":\"asj_cast/1_00000\",\"x\":1},{\"frameY\":-73,\"y\":1,\"frameWidth\":140,\"frameX\":-10,\"frameHeight\":240,\"height\":167,\"width\":113,\"name\":\"asj_cast/1_00002\",\"x\":285},{\"frameY\":-85,\"y\":309,\"frameWidth\":140,\"frameX\":-11,\"frameHeight\":240,\"height\":155,\"width\":113,\"name\":\"asj_cast/1_00001\",\"x\":143},{\"frameY\":-71,\"y\":144,\"frameWidth\":140,\"frameX\":-11,\"frameHeight\":240,\"height\":163,\"width\":111,\"name\":\"asj_cast/1_00003\",\"x\":143},{\"frameY\":-2,\"y\":1,\"frameWidth\":140,\"frameX\":0,\"frameHeight\":240,\"height\":228,\"width\":140,\"name\":\"asj_cast/1_00004\",\"x\":1},{\"frameY\":-8,\"y\":231,\"frameWidth\":140,\"frameX\":0,\"frameHeight\":240,\"height\":188,\"width\":140,\"name\":\"asj_cast/1_00005\",\"x\":1},{\"frameY\":-13,\"y\":1,\"frameWidth\":140,\"frameX\":0,\"frameHeight\":240,\"height\":141,\"width\":140,\"name\":\"asj_cast/1_00006\",\"x\":143},{\"frameY\":-20,\"y\":170,\"frameWidth\":140,\"frameX\":-4,\"frameHeight\":240,\"height\":114,\"width\":134,\"name\":\"asj_cast/1_00007\",\"x\":256}],\"name\":\"asj_cast\"}",
+  "texture": "b91c5ad1-3d4c-405a-9911-508ed0b01ccf",
+  "subMetas": {}
+}

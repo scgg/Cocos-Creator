@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "63b973e5-67e8-4f7e-aa75-98a7c4b4df4d",
+  "atlasJson": "{\"imagePath\":\"lt_buff_tex.png\",\"SubTexture\":[{\"x\":126,\"y\":43,\"width\":123,\"name\":\"lt_buff/2\",\"height\":40},{\"x\":1,\"y\":127,\"width\":123,\"name\":\"lt_buff/5\",\"height\":40},{\"x\":1,\"y\":43,\"width\":123,\"name\":\"lt_buff/1\",\"height\":40},{\"x\":126,\"y\":127,\"width\":123,\"name\":\"lt_buff/4\",\"height\":40},{\"x\":1,\"y\":1,\"width\":123,\"name\":\"lt_buff/3\",\"height\":40},{\"x\":1,\"y\":85,\"width\":123,\"name\":\"lt_buff/7\",\"height\":40},{\"x\":126,\"y\":85,\"width\":123,\"name\":\"lt_buff/6\",\"height\":40},{\"x\":126,\"y\":1,\"width\":123,\"name\":\"lt_buff/0\",\"height\":40}],\"name\":\"lt_buff\"}",
+  "texture": "b392db26-2008-40ae-97b8-af2490114055",
+  "subMetas": {}
+}

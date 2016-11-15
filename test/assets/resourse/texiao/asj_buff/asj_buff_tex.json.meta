@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "28b6c7a3-00ff-461e-b377-12554f641803",
+  "atlasJson": "{\"imagePath\":\"asj_buff_tex.png\",\"SubTexture\":[{\"frameY\":-151,\"y\":96,\"frameWidth\":180,\"frameX\":0,\"frameHeight\":250,\"height\":92,\"width\":180,\"name\":\"asj_buff/1_00000\",\"x\":183},{\"frameY\":-151,\"y\":1,\"frameWidth\":180,\"frameX\":0,\"frameHeight\":250,\"height\":93,\"width\":180,\"name\":\"asj_buff/1_00004\",\"x\":183},{\"frameY\":-151,\"y\":191,\"frameWidth\":180,\"frameX\":0,\"frameHeight\":250,\"height\":92,\"width\":180,\"name\":\"asj_buff/1_00005\",\"x\":1},{\"frameY\":-151,\"y\":96,\"frameWidth\":180,\"frameX\":0,\"frameHeight\":250,\"height\":93,\"width\":180,\"name\":\"asj_buff/1_00001\",\"x\":1},{\"frameY\":-151,\"y\":1,\"frameWidth\":180,\"frameX\":0,\"frameHeight\":250,\"height\":93,\"width\":180,\"name\":\"asj_buff/1_00002\",\"x\":1},{\"frameY\":-151,\"y\":190,\"frameWidth\":180,\"frameX\":0,\"frameHeight\":250,\"height\":92,\"width\":180,\"name\":\"asj_buff/1_00003\",\"x\":183}],\"name\":\"asj_buff\"}",
+  "texture": "bf64eb83-60eb-4c45-87b1-b85da919abcb",
+  "subMetas": {}
+}

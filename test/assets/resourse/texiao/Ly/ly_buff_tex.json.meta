@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "ff5d24e3-e531-4a1d-9e48-9bbcd230d794",
+  "atlasJson": "{\"imagePath\":\"ly_buff_tex.png\",\"SubTexture\":[{\"frameY\":-65,\"y\":1,\"frameWidth\":154,\"frameX\":-26,\"frameHeight\":269,\"height\":133,\"width\":77,\"name\":\"ly_buff/06\",\"x\":88},{\"frameY\":-65,\"y\":1,\"frameWidth\":154,\"frameX\":-24,\"frameHeight\":269,\"height\":134,\"width\":85,\"name\":\"ly_buff/05\",\"x\":1}],\"name\":\"ly_buff\"}",
+  "texture": "24c7bd47-fba3-4e9a-8786-4e0899104c81",
+  "subMetas": {}
+}

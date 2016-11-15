@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "cfd327ba-398d-4efa-b769-2b52ff9469c8",
+  "atlasJson": "{\"imagePath\":\"role-bdd_tex.png\",\"SubTexture\":[{\"frameY\":-2,\"y\":85,\"frameWidth\":92,\"frameX\":-2,\"height\":32,\"frameHeight\":35,\"width\":87,\"name\":\"bdd/shadow\",\"x\":108},{\"x\":1,\"y\":125,\"width\":33,\"name\":\"bdd/15\",\"height\":62},{\"x\":176,\"y\":1,\"width\":48,\"name\":\"bdd/14\",\"height\":82},{\"x\":74,\"y\":90,\"width\":22,\"name\":\"bdd/10\",\"height\":24},{\"x\":226,\"y\":1,\"width\":28,\"name\":\"bdd/16\",\"height\":38},{\"x\":196,\"y\":128,\"width\":11,\"name\":\"bdd/12\",\"height\":30},{\"x\":181,\"y\":119,\"width\":13,\"name\":\"bdd/11\",\"height\":29},{\"x\":36,\"y\":125,\"width\":36,\"name\":\"bdd/09\",\"height\":41},{\"x\":108,\"y\":1,\"width\":66,\"name\":\"bdd/01\",\"height\":66},{\"x\":128,\"y\":119,\"width\":51,\"name\":\"bdd/02\",\"height\":41},{\"x\":197,\"y\":85,\"width\":52,\"name\":\"bdd/03\",\"height\":41},{\"x\":74,\"y\":119,\"width\":52,\"name\":\"bdd/04\",\"height\":41},{\"x\":239,\"y\":68,\"width\":11,\"name\":\"bdd/05\",\"height\":8},{\"x\":226,\"y\":68,\"width\":11,\"name\":\"bdd/06\",\"height\":10},{\"x\":1,\"y\":1,\"width\":105,\"name\":\"bdd/13\",\"height\":87},{\"x\":1,\"y\":90,\"width\":71,\"name\":\"bdd/07\",\"height\":33},{\"x\":226,\"y\":41,\"width\":19,\"name\":\"bdd/08\",\"height\":25}],\"name\":\"role-bdd_1\"}",
+  "texture": "334f035a-c4b3-496e-8baf-d72e64ad27fa",
+  "subMetas": {}
+}

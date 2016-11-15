@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "7f42d83a-0ad7-4685-9e73-ae2d19b37a24",
+  "atlasJson": "{\"imagePath\":\"role-cy_tex.png\",\"SubTexture\":[{\"frameY\":-2,\"y\":127,\"frameWidth\":92,\"frameX\":-2,\"height\":32,\"frameHeight\":35,\"width\":87,\"name\":\"cy/shadow\",\"x\":1},{\"x\":1,\"y\":1,\"width\":129,\"name\":\"cy/14\",\"height\":124},{\"x\":135,\"y\":183,\"width\":24,\"name\":\"cy/10\",\"height\":24},{\"x\":200,\"y\":79,\"width\":39,\"name\":\"cy/15\",\"height\":102},{\"x\":236,\"y\":33,\"width\":12,\"name\":\"cy/12\",\"height\":30},{\"x\":236,\"y\":1,\"width\":15,\"name\":\"cy/11\",\"height\":30},{\"frameY\":0,\"y\":148,\"frameWidth\":33,\"frameX\":-1,\"height\":36,\"frameHeight\":36,\"width\":31,\"name\":\"cy/09\",\"x\":164},{\"x\":132,\"y\":79,\"width\":66,\"name\":\"cy/01\",\"height\":67},{\"x\":1,\"y\":161,\"width\":52,\"name\":\"cy/02\",\"height\":42},{\"x\":1,\"y\":205,\"width\":52,\"name\":\"cy/03\",\"height\":41},{\"x\":55,\"y\":183,\"width\":52,\"name\":\"cy/04\",\"height\":41},{\"x\":236,\"y\":65,\"width\":11,\"name\":\"cy/06\",\"height\":9},{\"x\":55,\"y\":161,\"width\":12,\"name\":\"cy/05\",\"height\":8},{\"frameY\":0,\"y\":1,\"frameWidth\":103,\"frameX\":0,\"height\":76,\"frameHeight\":76,\"width\":102,\"name\":\"cy/13\",\"x\":132},{\"x\":90,\"y\":148,\"width\":72,\"name\":\"cy/07\",\"height\":33},{\"x\":109,\"y\":183,\"width\":24,\"name\":\"cy/08\",\"height\":25}],\"name\":\"role-cy\"}",
+  "texture": "16609034-e900-4bed-a09d-0ced46af11c6",
+  "subMetas": {}
+}

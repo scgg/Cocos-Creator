@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "84d4692d-92eb-4d01-bc08-0df6bf077f4b",
+  "atlasJson": "{\"SubTexture\":[{\"x\":1,\"y\":1,\"width\":198,\"name\":\"zhao\",\"height\":202}],\"imagePath\":\"sx_hit_tex.png\",\"name\":\"sx_hit\"}",
+  "texture": "163657e1-2ceb-40d0-8dc8-d1a2ece51dd9",
+  "subMetas": {}
+}

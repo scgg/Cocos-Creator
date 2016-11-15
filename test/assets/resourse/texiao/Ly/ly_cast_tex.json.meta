@@ -1,0 +1,7 @@
+{
+  "ver": "1.0.0",
+  "uuid": "031eeb96-15b9-432b-9ec0-d1fa7a6adfd7",
+  "atlasJson": "{\"imagePath\":\"ly_cast_tex.png\",\"SubTexture\":[{\"frameY\":-1,\"y\":1,\"frameWidth\":148,\"frameX\":-1,\"frameHeight\":150,\"height\":147,\"width\":146,\"name\":\"fssf/03\",\"x\":1},{\"x\":149,\"y\":1,\"width\":137,\"name\":\"fssf/02\",\"height\":137},{\"x\":149,\"y\":140,\"width\":114,\"name\":\"fssf/01\",\"height\":113}],\"name\":\"ly_cast\"}",
+  "texture": "93df29c5-9882-4537-8409-34e8bc400ba3",
+  "subMetas": {}
+}
