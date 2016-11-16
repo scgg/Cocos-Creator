@@ -1,4 +1,5 @@
 const animation = require('getAnimate');
+
 cc.Class({
     extends: cc.Component,
 
@@ -25,25 +26,6 @@ cc.Class({
         otherLife: 700,
     },
     
-    speedUP: function(){
-        var self = this;
-        self.speedUp.node.on(cc.Node.EventType.TOUCH_END,function(event){
-            if(self.speed == 1)
-            {
-                self.speedLabel.string = "X 2";
-                self.speed = 2;
-            }else if(self.speed == 2)
-            {
-                self.speed = 3;
-                self.speedLabel.string = "X 3";
-            }else
-            {
-                self.speed = 1;
-                self.speedLabel.string = "X 1";
-            }
-        });
-        
-    },
     init: function() {
         //总生命值和当前生命值
         this.aT.life = this.TLife;
@@ -74,6 +56,7 @@ cc.Class({
         this.isFighter = 1;
         this.MaxMoveSpeed = 1;
         this.gameOver = 0;
+        this.armSpeed = 1;
         
     },
     //随机数，扣血量
@@ -168,7 +151,7 @@ cc.Class({
         
         let moveT = cc.moveBy(self.MaxMoveSpeed, cc.p(array[0],array[1]));
         let callBack = cc.callFunc(function() {
-            animation.attackDown(role1);
+            animation.attackDown(role1).timeScale = this.armSpeed;
             //每次攻击加0.2能量
             // for (let i = 0; i < self.FactionArrayOne.length; i++) {
             //     if(role1 == self.FactionArrayOne[i]) {
@@ -186,11 +169,11 @@ cc.Class({
         },self);
         let delay2 = cc.delayTime(0.3);
         let ending = cc.callFunc(function(){
-            animation.readyDown(role1);
+            animation.readyDown(role1).timeScale = this.armSpeed;
             if(role2.currlife > 0){
-                animation.readyDown(role2);
+                animation.readyDown(role2).tiemScale = this.armSpeed;
             }else{
-                animation.death(role2);
+                animation.death(role2).timeScale = this.armSpeed;
             }
         },self);
         let moveBac = cc.moveBy(self.MaxMoveSpeed, cc.p(-array[0],-array[1]));
@@ -199,11 +182,8 @@ cc.Class({
         },self);
         let spawn = cc.spawn(callBack,delay);
         let spawn2 = cc.spawn(klife,delay2);
-        let action = cc.sequence(moveT,spawn,spawn2,ending,moveBac,mBCallBack);
-        if(self.speed){
-            var ac = cc.speed(action, self.speed);
-            return ac;
-        }
+        let action = cc.sequence(moveT,spawn,spawn2,ending,moveBac,mBCallBack).speed(self.speed);
+        return action;
     },
     
     //战斗
@@ -219,7 +199,7 @@ cc.Class({
         //随机数
         this.GetRandomNum(100, 300);
         let sufferer = this.isSufferer();
-        animation.hitDown(sufferer);
+        animation.hitDown(sufferer).timeScale = this.armSpeed;
         sufferer.currlife -= this.Kblood;
         sufferer.HP.progress = sufferer.currlife/sufferer.life;
         if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0){
@@ -230,13 +210,57 @@ cc.Class({
             this.gameOver = 1;
         }
     },
+    speedUP: function(){
+        var self = this;
+        self.speedUp.node.on(cc.Node.EventType.TOUCH_END,function(event){
+            if(self.speed == 1)
+            {
+                self.speedLabel.string = "X 2";
+                self.speed = 2;
+                self.armSpeed = 1.5;
+            }else if(self.speed == 2)
+            {
+                self.speed = 3;
+                self.armSpeed = 2;
+                self.speedLabel.string = "X 3";
+            }else
+            {
+                self.speed = 1;
+                self.armSpeed = 1;
+                self.speedLabel.string = "X 1";
+            }
+        });
+        
+    },
+    xxx: function()
+    {
+        var self = this;
+        cc.loader.loadResAll('texiao/asj_buff/buff', function (err, assets) {
+        let node = new cc.Node;
+        self.bT.addChild(node);
+        node.setPosition( cc.p( 200, 200 ) );
+        let armatureDisplay = node.addComponent(dragonBones.ArmatureDisplay);
+        for ( let i = 0; i < assets.length; i++ ) {
+            if (assets[i] instanceof dragonBones.DragonBonesAsset) {
+                armatureDisplay.dragonAsset = assets[i];
+            }
     
+            if (assets[i] instanceof dragonBones.DragonBonesAtlasAsset) {
+                armatureDisplay.dragonAtlasAsset = assets[i];
+            }
+        }
+        log("xx");
+        armatureDisplay.armatureName = 'armatureName';
+        armatureDisplay.playAnimation('effect', -1);
+        });
+    },
     // use this for initialization
     onLoad: function () {
         this.init();
         this.FactionArrayOne = [this.aT,this.aP,this.aD];
         this.FactionArrayTwo = [this.bT,this.bP,this.bD];
         this.fight();
+        this.xxx();
     },
     start: function() {
         this.speedUP();
@@ -246,3 +270,4 @@ cc.Class({
         
     // },
 });
+
