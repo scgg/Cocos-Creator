@@ -65,22 +65,10 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-        speedBt: {
-            default: null,
-            type: cc.Button
-        },
-        T1NLButton: {
-            default: null,
-            type: cc.Button
-        },
-        adc1NLButton: {
-            default: null,
-            type: cc.Button
-        },
-        ap1NLButton: {
-            default: null,
-            type: cc.Button
-        },
+        speedBt: cc.Button,
+        T1NLButton: cc.Button,
+        adc1NLButton: cc.Button,
+        ap1NLButton: cc.Button,
         T1NL: {
             default: null,
             type: cc.ProgressBar
@@ -105,175 +93,177 @@ cc.Class({
     },
     //得到Sprite的X,Y,Width,Height
     getInfo: function(role) {
-        var X = role.x;
-        var Y = role.y;
-        var Width = role.width;
-        var Height =  role.height;
+        let X = role.x;
+        let Y = role.y;
+        let Width = role.width;
+        let Height =  role.height;
         // array[0] = X;
         // array[1] = Y;
         // array[2] = Width;
         // array[3] = Height;
-        var array = new Array(X,Y,Width,Height);
+        let array = new Array(X,Y,Width,Height);
         return array;
     },
     //两个Sprite之间的距离
     range: function(role1,role2) {
-        var arr1 = this.getInfo(role1);
-        var arr2 = this.getInfo(role2);
+        let arr1 = this.getInfo(role1);
+        let arr2 = this.getInfo(role2);
         if(arr1[0] < arr2[0]) {
-            var oneToTwoX = arr2[0] - arr1[0] - arr2[2]/2 - arr1[2]/2;
-            var oneToTwoY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
-            var array = new Array(oneToTwoX,oneToTwoY);
+            let oneToTwoX = arr2[0] - arr1[0] - arr2[2]/2 - arr1[2]/2;
+            let oneToTwoY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
+            let array = new Array(oneToTwoX,oneToTwoY);
             return array;
         } else {
-            var twoToOneX = arr2[0] - arr1[0] + arr2[2]/2 + arr1[2]/2;
-            var twoToOneY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
-            var array1 = new Array(twoToOneX,twoToOneY);
+            let twoToOneX = arr2[0] - arr1[0] + arr2[2]/2 + arr1[2]/2;
+            let twoToOneY = arr2[1] - arr1[1] - arr2[3]/2 + arr1[3]/2;
+            let array1 = new Array(twoToOneX,twoToOneY);
             return array1;
         }
     },
     //肇事者
     isWrecker: function() {
-        if(this.isFighter == 1) {
-            while(this.FactionArrayOne[this.Awrecker].currlife <= 0) {
-                this.Awrecker ++;
-                if(this.Awrecker > this.FactionArrayOne.length - 1) {
-                    this.Awrecker = 0;
-                }
-            }
-            var xx = this.FactionArrayOne[this.Awrecker]
+        if(this.isFighter == 1) 
+        {
+            while(this.FactionArrayOne[this.Awrecker].currlife <= 0) {this.Awrecker ++;}
+            let xx = this.FactionArrayOne[this.Awrecker];
             this.Awrecker ++;
-            if(this.Awrecker > this.FactionArrayOne.length - 1) {
-                this.Awrecker = 0;
-            }
+            if(this.Awrecker > this.FactionArrayOne.length - 1) {this.Awrecker = 0;}
             this.isFighter = 2;
             return xx;
-        }else{
-            while(this.FactionArrayTwo[this.Bwrecker].currlife <= 0) {
-                this.Bwrecker ++;
-                if(this.Bwrecker > 2) {this.Bwrecker = 0;}
-            }
-            var ss = this.FactionArrayTwo[this.Bwrecker];
+        }else
+        {
+            while(this.FactionArrayTwo[this.Bwrecker].currlife <= 0){this.Bwrecker ++;}
+            let ss = this.FactionArrayTwo[this.Bwrecker];
             this.Bwrecker ++;
-            if(this.Bwrecker > 2) {this.Bwrecker = 0;}
+            if(this.Bwrecker > this.FactionArrayTwo.length - 1) {this.Bwrecker = 0;}
             this.isFighter = 1;
             return ss;
         }
     },
     //受害人
     isSufferer: function() {
-        if(this.isFighter == 1) {
-            if(this.FactionArrayOne[0].currlife > 0) {
-                return this.FactionArrayOne[0];
-            }else if(this.FactionArrayOne[1].currlife > 0) {
-                return this.FactionArrayOne[1];
-            }else if (this.FactionArrayOne[2].currlife > 0) {
-                return this.FactionArrayOne[2];
+        if(this.isFighter == 1) 
+        {
+            if(this.FactionArrayOne[this.Asufferer].currlife > 0)
+            {
+                return this.FactionArrayOne[this.Asufferer];
+            }else{
+                this.Asufferer ++;
+                return this.FactionArrayOne[this.Asufferer];
             }
-        }else{
-            if(this.FactionArrayTwo[0].currlife > 0) {
-                return this.FactionArrayTwo[0];
-            }else if(this.FactionArrayTwo[1].currlife > 0) {
-                return this.FactionArrayTwo[1];
-            }else if (this.FactionArrayTwo[2].currlife > 0) {
-                return this.FactionArrayTwo[2];
+        }
+        else
+        {
+            if(this.FactionArrayTwo[this.Bsufferer].currlife > 0)
+            {
+                return this.FactionArrayTwo[this.Bsufferer];
+            }else{
+                this.Bsufferer ++;
+                return this.FactionArrayTwo[this.Bsufferer];
             }
         }
     },
     //随机数，扣血量
     GetRandomNum: function(Min,Max) {   
-        var Range = Max - Min;   
-        var Rand = Math.random();   
+        let Range = Max - Min;   
+        let Rand = Math.random();   
         this.Kblood = (Min + Math.round(Rand * Range));   
     }, 
-    move: function(role1,role2) {   
-        var array = this.range(role1,role2);
-        var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
-        var delay = cc.delayTime(this.fightAnimTime);
-        var moveBac = cc.moveBy(this.MaxMoveSpeed, cc.p(-array[0],-array[1]));
-        var callBack = cc.callFunc(function() {
-            var animState = this.animCtrl.playAdditive();
-            animState.speed = this.animSpeed;
-            this.kLife();
+    move: function(role1,role2) {  
+        var self = this;
+        let array = self.range(role1,role2);
+        let moveT = cc.moveBy(self.MaxMoveSpeed, cc.p(array[0],array[1]));
+        let delay = cc.delayTime(self.fightAnimTime);
+        let moveBac = cc.moveBy(self.MaxMoveSpeed, cc.p(-array[0],-array[1]));
+        let callBack = cc.callFunc(function() {
+            let animState = self.animCtrl.playAdditive();
+            animState.speed = self.animSpeed;
+            self.kLife();
             //每次攻击加0.2能量
-            for (var i = 0; i < this.FactionArrayOne.length; i++) {
-                if(role1 == this.FactionArrayOne[i]) {
+            for (let i = 0; i < self.FactionArrayOne.length; i++) {
+                if(role1 == self.FactionArrayOne[i]) {
                     role1.NL.progress += 0.3;
                     if(role1.NL.progress > 1) {role1.NL.progress = 1;}
-                }else if(role2 == this.FactionArrayOne[i]) {
+                }else if(role2 == self.FactionArrayOne[i]) {
                     role2.NL.progress += 0.2;
                     if(role2.NL.progress > 1) {role2.NL.progress = 1;}
                 }
             }
-        },this);
-        var mBCallBack = cc.callFunc(function() {
-            if(this.isAuto == 0)
+        },self);
+        let mBCallBack = cc.callFunc(function() 
+        {
+            if(self.isAuto == 0)
             {
-                if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0) {
-                this.fight();
+                if(self.isT1FDZ == 0 && self.isAdc1FDZ == 0 && self.isAp1FDZ == 0) {
+                    self.fight();
                 }else{
-                    if(this.isT1FDZ == 1) {
-                        this.HSG(this.T1);
-                        this.isT1FDZ = 0;
-                    }else if(this.isAdc1FDZ == 1) {
-                        this.HSG(this.adc1);
-                        this.isAdc1FDZ = 0;
+                    if(self.isT1FDZ == 1) {
+                        self.HSG(self.T1);
+                        self.isT1FDZ = 0;
+                    }else if(self.isAdc1FDZ == 1) {
+                        self.HSG(self.adc1);
+                        self.isAdc1FDZ = 0;
                     }else {
-                        this.HSG(this.ap1);
-                        this.isAp1FDZ = 0;
+                        self.HSG(self.ap1);
+                        self.isAp1FDZ = 0;
                     }
                 }
             }else{
-                if(this.T1.NL.progress == 1) {
-                    this.HSG(this.T1);
-                    this.T1.NL.progress = 0;
-                }else if(this.adc1.NL.progress == 1) {
-                    this.HSG(this.adc1);
-                    this.adc1.NL.progress = 0;
-                }else if(this.ap1.NL.progress == 1) {
-                    this.HSG(this.ap1);
-                    this.ap1.NL.progress = 0;
+                if(self.T1.NL.progress == 1 && self.T1.currlife > 0) {
+                    self.HSG(self.T1);
+                }else if(self.adc1.NL.progress == 1 && self.adc1.currlife > 0) {
+                    self.HSG(self.adc1);
+                }else if(self.ap1.NL.progress == 1 && self.ap1.currlife > 0) {
+                    self.HSG(self.ap1);
                 }else{
-                    this.fight();
+                    self.fight();
                 }
             }
-            
-        },this);
-        var spawn = cc.spawn(callBack,delay);
-        var action = cc.sequence(moveT,spawn,moveBac,mBCallBack);
+        },self);
+        let spawn = cc.spawn(callBack,delay);
+        let action = cc.sequence(moveT,spawn,moveBac,mBCallBack);
         return action;
     },
     fireTo: function(role) {
-        var array = this.range(this.missile, role);
-        var moveT = cc.moveBy(this.MaxMoveSpeed, cc.p(array[0],array[1]));
-        var moveBac = cc.moveBy(0, cc.p(-array[0],-array[1]));
-        var callBack = cc.callFunc(function(){
-            this.kLife();
-            this.ap1.NL.progress += 0.3
-            if(this.ap1.NL.progress > 1) {
-                this.ap1.NL.progress = 1;
+        var self = this;
+        let array = self.range(self.missile, role);
+        let moveT = cc.moveBy(self.MaxMoveSpeed, cc.p(array[0],array[1]));
+        let moveBac = cc.moveBy(0, cc.p(-array[0],-array[1]));
+        let callBack = cc.callFunc(function(){
+            self.kLife();
+            self.ap1.NL.progress += 0.3
+            if(self.ap1.NL.progress > 1) {
+                self.ap1.NL.progress = 1;
             }
-            this.missile.opacity = 0;
-            },this);
-            var mbCallback = cc.callFunc(function() {
-                if(this.isT1FDZ == 0 && this.isAdc1FDZ == 0 && this.isAp1FDZ == 0) {
-                    this.fight();
-                }else{
-                    if(this.isT1FDZ == 1) {
-                        this.HSG(this.T1);
-                        this.isT1FDZ = 0;
-                    }else if(this.isAdc1FDZ == 1) {
-                        this.HSG(this.adc1);
-                        this.isAdc1FDZ = 0;
-                    }else {
-                        this.HSG(this.ap1);
-                        this.isAp1FDZ = 0;
-                    }
+            self.missile.opacity = 0; 
+            },self);
+        let mbCallback = cc.callFunc(function() {
+            if(self.isAuto == 0)
+            {
+                if(self.isAp1FDZ == 0) 
+                {
+                    self.fight();
                 }
-            },this)
-        var action = cc.sequence(moveT,callBack,moveBac,mbCallback);
-        if(this.fightSpeed) {
-            var ac = cc.speed(action,this.fightSpeed);
+                else
+                {
+                    self.HSG(self.ap1);
+                    self.isAp1FDZ = 0;
+                }
+            }
+            else
+            {
+                if(self.ap1.NL.progress == 1 && self.ap1.currlife > 0) {
+                    self.HSG(self.ap1);
+                    self.ap1.NL.progress = 0;
+                }else{
+                    self.fight();
+                }
+            }
+        
+            },self);
+        let action = cc.sequence(moveT,callBack,moveBac,mbCallback);
+        if(self.fightSpeed) {
+            var ac = cc.speed(action,self.fightSpeed);
         }
         return ac;
     },
@@ -286,20 +276,17 @@ cc.Class({
     },
     //战斗
     fight: function() {
-        if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0){
-            this.winner.string = "Two Win!!";
-        }else if(this.FactionArrayTwo[0].currlife <= 0 && this.FactionArrayTwo[1].currlife <= 0 && this.FactionArrayTwo[2].currlife <= 0){
-            this.winner.string = "One Win!!";
-        }else{
-            var wrecker = this.isWrecker();
-            var sufferer = this.isSufferer();
+        if(this.gameOver == 0)
+        {
+            let wrecker = this.isWrecker();
+            let sufferer = this.isSufferer();
             this.animCtrl = wrecker.getComponent(cc.Animation);
             if(wrecker == this.ap1) {
-                var animState = this.animCtrl.playAdditive();
+                let animState = this.animCtrl.playAdditive();
                 //导弹
                 this.missile.opacity = 255;
-                var missileAnim = this.missile.getComponent(cc.Animation);
-                var misState = missileAnim.playAdditive();
+                let missileAnim = this.missile.getComponent(cc.Animation);
+                let misState = missileAnim.playAdditive();
                 animState.speed = this.animSpeed;
                 misState.speed = this.animSpeed;
                 this.missile.runAction(this.fireTo(sufferer));
@@ -312,12 +299,20 @@ cc.Class({
     kLife: function() {
         //随机数
         this.GetRandomNum(100, 300);
-        var sufferer = this.isSufferer();
+        let sufferer = this.isSufferer();
         sufferer.currlife -= this.Kblood;
+        log(sufferer.currlife);
         sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
         if(sufferer.currlife <= 0 && sufferer == this.T2){
-            var ani = sufferer.getComponent(cc.Animation);
-            ani.play("T2Die");
+            let ani = sufferer.getComponent(cc.Animation);
+            ani.playAdditive("T2Die");
+        }
+        if(this.FactionArrayOne[0].currlife <= 0 && this.FactionArrayOne[1].currlife <= 0 && this.FactionArrayOne[2].currlife <= 0){
+            this.winner.string = "Two Win!!";
+            this.gameOver = 1;
+        }else if(this.FactionArrayTwo[0].currlife <= 0 && this.FactionArrayTwo[1].currlife <= 0 && this.FactionArrayTwo[2].currlife <= 0){
+            this.winner.string = "One Win!!";
+            this.gameOver = 1;
         }
     },
 
@@ -325,32 +320,35 @@ cc.Class({
         var self = this;
         self.speedBt.node.on(cc.Node.EventType.TOUCH_END,function(event)
         {
-                if(self.fightSpeed == 1){
-                    self.btLabel.string = "X 2";
-                    self.fightSpeed = 2;
-                    self.animSpeed = 0.6;
-                }else if (self.fightSpeed == 2){
-                    self.btLabel.string = "X 3";
-                    self.fightSpeed = 3;
-                    self.animSpeed = 0.9;
-                }else{
-                    self.btLabel.string = "X 1";
-                    self.fightSpeed = 1;
-                    self.animSpeed = 0.3;
-                } 
+            if(self.fightSpeed == 1){
+                self.btLabel.string = "X 2";
+                self.fightSpeed = 2;
+                self.animSpeed = 0.6;
+                self.windSpeed = 0.6;
+            }else if (self.fightSpeed == 2){
+                self.btLabel.string = "X 3";
+                self.fightSpeed = 3;
+                self.animSpeed = 0.8;
+                self.windSpeed = 0.4;
+            }else{
+                self.btLabel.string = "X 1";
+                self.fightSpeed = 1;
+                self.animSpeed = 0.4;
+                self.windSpeed = 0.8; 
+            } 
         });  
     },
     wind : function(releaser) {
-        var wind =  new cc.Node();
+        let wind =  new cc.Node();
+        let sprite = wind.addComponent(cc.Sprite);
         wind.parent = this.T1.parent;
-        var sprite = wind.addComponent(cc.Sprite);
-        var array1 = this.getInfo(releaser);
+        let array1 = this.getInfo(releaser);
         wind.x = array1[0] + 80;
         wind.y = array1[1];
-        var windNum = 1;//wind第一张图
+        let windNum = 1;//wind第一张图
         //起风吧
         this.schedule(function(){
-            var photo = cc.js.formatStr('resources/wind/winds%d.png',windNum);
+            let photo = cc.js.formatStr('resources/wind/winds%d.png',windNum);
             sprite.spriteFrame = new cc.SpriteFrame(cc.url.raw(photo));
             windNum ++;
             if(windNum > 7) { windNum = 1;}
@@ -359,35 +357,48 @@ cc.Class({
     },
     //技能：哈塞给
     HSG : function(releaser) {
-        var sufferer;
-        if(this.FactionArrayTwo[0].currlife > 0){
-                sufferer = this.FactionArrayTwo[0];
-            }else if(this.FactionArrayTwo[1].currlife > 0){
-                sufferer = this.FactionArrayTwo[1];
-            }else if (this.FactionArrayTwo[2].currlife > 0){
-                sufferer = this.FactionArrayTwo[2];
-            } 
-        var wind = this.wind(releaser);
-        var moveX = sufferer.x - wind.x - sufferer.width/2 - wind.width/2;
-        var moveY = sufferer.y - wind.y;
-        var moveto = cc.moveBy(1, cc.p(moveX,moveY));
-        var callBack = cc.callFunc(function(){
-            wind.destroy();
-            sufferer.currlife -= this.Kblood;
-            sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
-            if(sufferer.currlife <= 0 && sufferer == this.T2){
-                var ani = sufferer.getComponent(cc.Animation);
-                ani.play("T2Die");
+        var self = this;
+        if(self.gameOver == 0)
+        {
+            releaser.NL.progress = 0;
+            let sufferer;
+            if(self.FactionArrayOne[self.Bsufferer].currlife > 0)
+            {
+                sufferer =  self.FactionArrayTwo[self.Bsufferer];
+            }else{
+                self.Bsufferer ++;
+                sufferer = self.FactionArrayTwo[self.Bsufferer];
             }
-            this.fight();
-        }, this);
-        var delay = cc.delayTime(0.5);
-        var callBac = cc.callFunc(function(){
-            var anima = releaser.getComponent(cc.Animation);
-            anima.playAdditive();
-        },this);
-        wind.runAction(cc.sequence(callBac,delay,moveto,callBack));
+            let wind = self.wind(releaser);
+            let moveX = sufferer.x - wind.x - sufferer.width/2 - wind.width/2;
+            let moveY = sufferer.y - wind.y;
+            let moveto = cc.moveBy(self.windSpeed, cc.p(moveX,moveY));
+            let callBack = cc.callFunc(function(){
+                wind.destroy();
+                sufferer.currlife -= self.Kblood;
+                sufferer.ProgressBar.progress = sufferer.currlife/sufferer.life;
+                if(sufferer.currlife <= 0 && sufferer == self.T2) {
+                    let ani = sufferer.getComponent(cc.Animation);
+                    ani.playAdditive("T2Die");
+                }
+                if(self.FactionArrayOne[0].currlife <= 0 && self.FactionArrayOne[1].currlife <= 0 && self.FactionArrayOne[2].currlife <= 0){
+                    self.winner.string = "Two Win!!";
+                    self.gameOver = 1;
+                }else if(self.FactionArrayTwo[0].currlife <= 0 && self.FactionArrayTwo[1].currlife <= 0 && self.FactionArrayTwo[2].currlife <= 0){
+                    self.winner.string = "One Win!!";
+                    self.gameOver = 1;
+                }
+                self.fight();
+            }, self);
+            let delay = cc.delayTime(0.2);
+            let callBac = cc.callFunc(function(){
+                let anima = releaser.getComponent(cc.Animation);
+                anima.playAdditive();
+                },self);
+            wind.runAction(cc.sequence(callBac,delay,moveto,callBack));
+        }
     },
+    
     dazhao: function() {
         var self = this;
         self.T1NLButton.node.on(cc.Node.EventType.TOUCH_END,function(event) {
@@ -467,17 +478,18 @@ cc.Class({
         this.isAdc1FDZ = 0;
         this.isAp1FDZ = 0;
         this.isAuto = 0;
+        this.windSpeed = 0.9;
+        this.gameOver = 0;
     },
     onLoad: function () {
         this.init();
         //两个阵营内的角色
         this.FactionArrayOne = [this.T1,this.adc1,this.ap1];
         this.FactionArrayTwo = [this.T2,this.adc2,this.ap2];
-    },
-    start: function() {
-        var ap2Anim = this.ap2.getComponent(cc.Animation);
+        
+        let ap2Anim = this.ap2.getComponent(cc.Animation);
         ap2Anim.playAdditive("ap2Animation");
-        var ap1Anim = this.ap1.getComponent(cc.Animation);
+        let ap1Anim = this.ap1.getComponent(cc.Animation);
         ap1Anim.playAdditive("ap1");
         this.schedule(function() {
             this.loadingLayout.destroy();
@@ -486,6 +498,7 @@ cc.Class({
         this.button();
         this.dazhao();
     },
-    // update: function (dt) {
-    // },
+    start: function() {},
+    update: function (dt){},
+
 });
