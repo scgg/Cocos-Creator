@@ -24,7 +24,6 @@ function hitDown(person) {
     return arm;
 }
 
-
 module.exports = {
     death: death,
     readyDown: readyDown,
