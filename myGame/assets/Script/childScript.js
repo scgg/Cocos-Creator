@@ -17,6 +17,20 @@ cc.Class({
 
         readyTime: 30,
     },
+    ourAllHp: function() {
+        for(i = 0; i < this.heroArray.length; i++)
+        {
+            this.ourAllHP += this.currHP(this.heroArray[i]);
+            this.ourAllCurrHP = this.ourAllHP;
+        }
+    },
+    enemyAllHp: function() {
+        for(i = 0; i < this.enemyArray.length; i++)
+        {
+            this.enemyAllHP += this.currHP(this.enemyArray[i]);
+            this.enemyAllCurrHP = this.enemyAllHP;
+        }
+    },
     createHero: function(pref,position) {
         var prefab = cc.instantiate(pref);
         prefab.parent = this.node;
@@ -28,6 +42,9 @@ cc.Class({
         prefab.parent = this.node;
         prefab.position = position;
         prefab.scaleX = - 1;
+        var person = require('person');
+        var personinfo = prefab.getComponent(person);
+        personinfo.initLabel();
         return prefab;
     },
     KLife: function (hero,biubiubiu) {
@@ -35,6 +52,15 @@ cc.Class({
         var personinfo = hero.getComponent(person);
         animation.hitDown(this.getAnimation(hero));
         personinfo.KLife(biubiubiu);
+        if(this.isFighter == 1)
+        {
+            this.enemyAllCurrHP -= biubiubiu;
+            this.allEnemyLife.progress = this.enemyAllCurrHP/this.enemyAllHP;
+        }else{
+            this.ourAllCurrHP -= biubiubiu;
+            this.allOurLife.progress = this.ourAllCurrHP/this.ourAllHP;
+        }
+        
         if(personinfo.currLife <= 0)
         {
             this.defaultTouch();
@@ -52,7 +78,7 @@ cc.Class({
     },
     //默认选中目标
     defaultTouch: function() {
-        for(var i = 0; i< this.enemyArray.length; i++)
+        for(var i = 0; i < this.enemyArray.length; i++)
         {
             if(this.currHP(this.enemyArray[i]) > 0)
             {
@@ -70,18 +96,22 @@ cc.Class({
             {
                 for(var i = 0; i < this.enemyArray.length; i++)
                 {
-                    if(i == button.tag)
+                    if(this.currHP(this.enemyArray[i]) > 0)
                     {
-                        if(this.touch.x == this.enemyArray[i].x + 10 &&
-                            this.touch.y == this.enemyArray[i].y + 40)
+                        if(i == button.tag)
                         {
-                            this.touch.opacity = 0;
-                            this.isReadyTime = 0;
+                            //攻击对象
                             this.wounded = this.enemyArray[i];
-                            this.fight(); 
-                        }else{
-                            this.touch.setPosition(cc.p(this.enemyArray[i].x + 10,this.enemyArray[i].y + 40));
-                            return;
+                            if(this.touch.x == this.enemyArray[i].x + 10 &&
+                                this.touch.y == this.enemyArray[i].y + 40)
+                            {
+                                this.touch.opacity = 0;
+                                this.isReadyTime = 0;
+                                this.fight();
+                            }else{
+                                this.touch.setPosition(cc.p(this.enemyArray[i].x + 10,this.enemyArray[i].y + 40));
+                                return;
+                            }
                         }
                     }
                 }
@@ -98,10 +128,10 @@ cc.Class({
             }
             var xx = this.heroArray[this.Awrecker];
             this.Awrecker ++;
-            if(this.Awrecker > this.heroArray.length - 1) 
+            if(this.Awrecker == this.heroArray.length) 
             {
-                this.Awrecker = 0;
                 this.isFighter = 0;
+                this.Awrecker = 0;
                 this.isTouch = 0;
             }
             return xx;
@@ -114,7 +144,7 @@ cc.Class({
             }
             var ss = this.enemyArray[this.Bwrecker];
             this.Bwrecker ++;
-            if(this.Bwrecker > this.enemyArray.length - 1) 
+            if(this.Bwrecker == this.enemyArray.length) 
             {
                 this.isFighter = 1;
                 this.Bwrecker = 0;
@@ -139,7 +169,6 @@ cc.Class({
                 return this.heroArray[this.Asufferer];
             }
         }
-        
     },
     move: function(role1,role2) {  
         var self = this;
@@ -161,7 +190,7 @@ cc.Class({
                 animation.death(self.getAnimation(role2));
             }
         },self);
-        var moveBac = cc.moveBy(self.MaxMoveSpeed, cc.p(-array[0],-array[1]));
+        var moveBac = cc.moveBy(self.MaxMoveSpeed/2, cc.p(-array[0],-array[1]));
         
         var last = cc.callFunc(function(){
             if(self.isReadyTime == 0)
@@ -178,15 +207,22 @@ cc.Class({
     
     //战斗
     fight: function() {
-        var sufferer = this.isSufferer();
-        var wrecker = this.isWrecker();
-        if(this.currHP(sufferer) <= 0)
+        if(this.ourAllCurrHP > 0 && this.enemyAllCurrHP > 0)
         {
-            sufferer = this.defaultTouch;
+            var sufferer = this.isSufferer();
+            var wrecker = this.isWrecker();
+            if(this.currHP(sufferer) <= 0)
+            {
+                sufferer = this.defaultTouch;
+            }
+            wrecker.runAction(this.move(wrecker,sufferer));
         }
-        wrecker.runAction(this.move(wrecker,sufferer));
     },
     init: function() {
+    this.ourAllHP = 0;
+    this.ourAllCurrHP = 0;
+    this.enemyAllHP = 0;
+    this.enemyAllCurrHP = 0;
         this.isFighter = 1;
         this.Asufferer = 0;
         this.Awrecker = 0;
@@ -209,12 +245,12 @@ cc.Class({
         this.outX2 = - width * 2 / 6; 
         
         //我方固定位置
-        let A0 = cc.p(this.ourLeftX, this.topY);
-        let A1 = cc.p(this.ourLeftX, this.centerY);
-        let A2 = cc.p(this.ourLeftX, this.buttomY);
-        let A3 = cc.p(this.ourRightX, this.topY);
-        let A4 = cc.p(this.ourRightX, this.centerY);
-        let A5 = cc.p(this.ourRightX, this.buttomY);
+        let A3 = cc.p(this.ourLeftX, this.topY);
+        let A4 = cc.p(this.ourLeftX, this.centerY);
+        let A5 = cc.p(this.ourLeftX, this.buttomY);
+        let A0 = cc.p(this.ourRightX, this.topY);
+        let A1 = cc.p(this.ourRightX, this.centerY);
+        let A2 = cc.p(this.ourRightX, this.buttomY);
         //敌方固定位置
         let B0 = cc.p(this.enemyLeftX, this.topY);
         let B1 = cc.p(this.enemyLeftX, this.centerY);
@@ -223,12 +259,12 @@ cc.Class({
         let B4 = cc.p(this.enemyRightX, this.centerY);
         let B5 = cc.p(this.enemyRightX, this.buttomY);
         //初始位置
-        let out0 = cc.p(- this.ourRightX, this.topY);
-        let out1 = cc.p(- this.ourRightX, this.centerY);
-        let out2 = cc.p(- this.ourRightX, this.buttomY);
-        let out3 = cc.p(- this.ourLeftX, this.topY);
-        let out4 = cc.p(- this.ourLeftX, this.centerY);
-        let out5 = cc.p(- this.ourLeftX, this.buttomY);
+        let out3 = cc.p(- this.ourRightX, this.topY);
+        let out4 = cc.p(- this.ourRightX, this.centerY);
+        let out5 = cc.p(- this.ourRightX, this.buttomY);
+        let out0 = cc.p(- this.ourLeftX, this.topY);
+        let out1 = cc.p(- this.ourLeftX, this.centerY);
+        let out2 = cc.p(- this.ourLeftX, this.buttomY);
         
         this.ourPositionArray = [A0,A1,A2,A3,A4,A5];
         this.enemyPositionArray = [B0,B1,B2,B3,B4,B5];
@@ -256,10 +292,12 @@ cc.Class({
         for(var j = 0; j < this.enemyPositionArray.length; j++) 
         {
             var enemy = this.createEnemy(this.enemyPrefab[j], this.enemyPositionArray[j]);
+            
             this.enemyArray.push(enemy);
         }
+        this.ourAllHp();
+        this.enemyAllHp();
     },
-
     start: function() {
         //添加点击事件
         for(var i = 0; i < this.enemyArray.length; i++){
@@ -289,6 +327,7 @@ cc.Class({
         if(this.isReadyTime == 0){
             this.timeAndBout.string = "回合数";
             this.touch.opacity = 0;
+            this.readyTime = 30;
         }else{
             this.touch.opacity = 255;
             this.time += dt;

@@ -3,7 +3,7 @@ cc.Class({
 
     properties: {
         xuetiao: cc.ProgressBar,
-        label: cc.Label,
+        Klabel: cc.Label,
         animation: cc.Node,
         currLife: 1000,
         allLife: 1000,
@@ -15,14 +15,17 @@ cc.Class({
         if(!hurt){
             return;
         }
-        self.label.string = "-" + hurt;
+        self.Klabel.string = "-" + hurt;
         self.currLife -= hurt; 
         self.xuetiao.progress = self.currLife/self.allLife;
 
         self.scheduleOnce(function (dt) {
-            self.label.string = null;
-
-        }, 2);
+            self.Klabel.string = null;
+        }, 1);
+    },
+    initLabel: function() {
+        var self = this;
+        self.Klabel.scaleX = - self.Klabel.scaleX; 
     },
     // use this for initialization
     onLoad: function () {

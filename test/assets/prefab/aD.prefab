@@ -43,8 +43,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 135,
-      "y": 169
+      "x": 101,
+      "y": 200
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -211,7 +211,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "c206aff8-974d-4096-bc79-46bceb9905d8"
     },
     "fileId": "3cc79lH6UtJlZYkkhxzwrcx",
     "sync": false
@@ -264,7 +264,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "c206aff8-974d-4096-bc79-46bceb9905d8"
     },
     "fileId": "c3f0539R2pLRKN1DBcSmgQj",
     "sync": false
@@ -297,7 +297,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "c206aff8-974d-4096-bc79-46bceb9905d8"
     },
     "fileId": "c7785deyYtINYanxHIVtCtW",
     "sync": false
