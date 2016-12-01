@@ -11,10 +11,11 @@ cc.Class({
         bP: cc.Prefab,
         bT: cc.Prefab,
         timeAndBout: cc.Label,
+        boutLabel: cc.Node,
         touch: cc.Node,
         allOurLife: cc.ProgressBar,
         allEnemyLife: cc.ProgressBar,
-
+        
         readyTime: 30,
     },
     ourAllHp: function() {
@@ -106,6 +107,7 @@ cc.Class({
                                 this.touch.y == this.enemyArray[i].y + 40)
                             {
                                 this.touch.opacity = 0;
+                                this.bout ++;
                                 this.isReadyTime = 0;
                                 this.fight();
                             }else{
@@ -276,12 +278,15 @@ cc.Class({
         //准备时间
         this.isReadyTime = 0;
         this.time = 0;
+        this.bout = 0;
+        this.label = this.boutLabel.getComponent(cc.Label);
     },
     onLoad: function () {
         this.init();
         this.heroArray = [];
         this.enemyArray = [];
         this.isTouch = 0;
+        this.boutLabel.string = this.bout + "/20";
         //初始化我方阵容,position在场景外
         for(var i = 0; i < this.outPositionArray.length; i++)
         {
@@ -324,11 +329,14 @@ cc.Class({
     update: function (dt) {
 
         if(this.isReadyTime == 0){
+            this.boutLabel.opacity = 255;
+            this.label.string = this.bout + "/20";
             this.timeAndBout.string = "回合数";
             this.touch.opacity = 0;
             this.readyTime = 31;
         }
         else{
+            this.boutLabel.opacity = 0;
             this.touch.opacity = 255;
             this.time += dt;
             if(this.time >= 1){
@@ -338,6 +346,7 @@ cc.Class({
                 if(this.readyTime == 0)
                 {
                     this.isReadyTime = 0;
+                    this.label.string = this.bout + "/20";
                     this.touch.opacity = 0;
                     this.fight();
                 }
