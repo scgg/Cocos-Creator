@@ -128,7 +128,7 @@ cc.Class({
             }
             var xx = this.heroArray[this.Awrecker];
             this.Awrecker ++;
-            if(this.Awrecker == this.heroArray.length) 
+            if(this.Awrecker > this.heroArray.length - 1) 
             {
                 this.isFighter = 0;
                 this.Awrecker = 0;
@@ -144,7 +144,7 @@ cc.Class({
             }
             var ss = this.enemyArray[this.Bwrecker];
             this.Bwrecker ++;
-            if(this.Bwrecker == this.enemyArray.length) 
+            if(this.Bwrecker > this.enemyArray.length - 1) 
             {
                 this.isFighter = 1;
                 this.Bwrecker = 0;
@@ -219,10 +219,10 @@ cc.Class({
         }
     },
     init: function() {
-    this.ourAllHP = 0;
-    this.ourAllCurrHP = 0;
-    this.enemyAllHP = 0;
-    this.enemyAllCurrHP = 0;
+        this.ourAllHP = 0;
+        this.ourAllCurrHP = 0;
+        this.enemyAllHP = 0;
+        this.enemyAllCurrHP = 0;
         this.isFighter = 1;
         this.Asufferer = 0;
         this.Awrecker = 0;
@@ -319,7 +319,6 @@ cc.Class({
             armatureDisplay.playAnimation("hit_down",0);
             */
         }
-        
     },
     
     update: function (dt) {
@@ -327,8 +326,9 @@ cc.Class({
         if(this.isReadyTime == 0){
             this.timeAndBout.string = "回合数";
             this.touch.opacity = 0;
-            this.readyTime = 30;
-        }else{
+            this.readyTime = 31;
+        }
+        else{
             this.touch.opacity = 255;
             this.time += dt;
             if(this.time >= 1){
